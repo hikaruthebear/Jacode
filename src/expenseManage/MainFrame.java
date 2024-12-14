@@ -10,23 +10,22 @@ package expenseManage;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainFrame
-     */
+    
     public MainFrame() {
         initComponents();
         
         
         //pwede tanggalin to tinest ko lang
-        Record record1 =new Record();
-        scrollfield.add(record1);
-        Record record2 =new Record();
-        scrollfield.add(record2);
-        Record record3 =new Record();
+        //String name, String time, float quantity, boolean isIncome (if income yes, if expense false)
+        Record record1 = new Record("Apples", "12:30 PM", 5.5, true);
+        scrollfield.add (record1);
+        Record record2 = new Record("Bananas", "8:45 AM", 10.0, false);
+        scrollfield.add (record2);
+        Record record3 = new Record("Oranges", "3:15 PM", 2.75, true);
         scrollfield.add(record3);
-         Record record4 =new Record();
+         Record record4 = new Record("Grapes", "6:00 PM", 0.0, false);
         scrollfield.add(record4);
-        Record record5 =new Record();
+        Record record5 = new Record("Mangoes", "11:00 AM", 7.25, true)  ;
         scrollfield.add(record5);
        //<--->
        
