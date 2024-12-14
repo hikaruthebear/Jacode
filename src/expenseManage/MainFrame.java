@@ -15,6 +15,23 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+        
+        
+        //pwede tanggalin to tinest ko lang
+        Record record1 =new Record();
+        scrollfield.add(record1);
+        Record record2 =new Record();
+        scrollfield.add(record2);
+        Record record3 =new Record();
+        scrollfield.add(record3);
+         Record record4 =new Record();
+        scrollfield.add(record4);
+        Record record5 =new Record();
+        scrollfield.add(record5);
+       //<--->
+       
+        
+
     }
 
     /**
@@ -26,8 +43,11 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        RecordPannel = new javax.swing.JPanel();
+        jPanel15 = new javax.swing.JPanel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        HomePannel = new javax.swing.JPanel();
+        TopPannel = new javax.swing.JPanel();
         UserLabel = new javax.swing.JLabel();
         BalanceName = new javax.swing.JLabel();
         BalanceQuantity = new javax.swing.JLabel();
@@ -39,42 +59,77 @@ public class MainFrame extends javax.swing.JFrame {
         Day = new javax.swing.JTextField();
         Month = new javax.swing.JTextField();
         BalanceBarSpent = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
+        BotomPannel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
+        scrollfield = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        ListPannel = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+
+        RecordPannel.setOpaque(false);
+
+        jPanel15.setBackground(new java.awt.Color(255, 51, 51));
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 426, Short.MAX_VALUE)
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout RecordPannelLayout = new javax.swing.GroupLayout(RecordPannel);
+        RecordPannel.setLayout(RecordPannelLayout);
+        RecordPannelLayout.setHorizontalGroup(
+            RecordPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RecordPannelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        RecordPannelLayout.setVerticalGroup(
+            RecordPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(RecordPannelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(450, 769));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setMaximumSize(new java.awt.Dimension(466, 769));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        HomePannel.setBackground(new java.awt.Color(255, 255, 255));
+        HomePannel.setMaximumSize(new java.awt.Dimension(466, 769));
+        HomePannel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(226, 255, 223));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        TopPannel.setBackground(new java.awt.Color(226, 255, 223));
+        TopPannel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         UserLabel.setFont(new java.awt.Font("Albert Sans", 1, 24)); // NOI18N
         UserLabel.setForeground(new java.awt.Color(51, 51, 51));
         UserLabel.setText("Hi, User1234");
-        jPanel2.add(UserLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 34, -1, -1));
+        TopPannel.add(UserLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 34, -1, -1));
 
         BalanceName.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
         BalanceName.setForeground(new java.awt.Color(51, 51, 51));
         BalanceName.setText("Balance");
-        jPanel2.add(BalanceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+        TopPannel.add(BalanceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
 
         BalanceQuantity.setBackground(new java.awt.Color(0, 0, 0));
         BalanceQuantity.setFont(new java.awt.Font("Albert Sans", 1, 48)); // NOI18N
         BalanceQuantity.setForeground(new java.awt.Color(0, 0, 0));
         BalanceQuantity.setText("P251.99");
-        jPanel2.add(BalanceQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 111, -1, 43));
+        TopPannel.add(BalanceQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 111, -1, 43));
 
         jPanel4.setBackground(new java.awt.Color(226, 255, 223));
 
@@ -108,7 +163,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 178, 417, -1));
+        TopPannel.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 178, 417, -1));
 
         jPanel3.setBackground(new java.awt.Color(226, 255, 223));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -162,22 +217,29 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel3.add(Month, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 30));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(336, 28, 101, -1));
+        TopPannel.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(336, 28, 101, -1));
 
         BalanceBarSpent.setFont(new java.awt.Font("Albert Sans", 0, 18)); // NOI18N
         BalanceBarSpent.setForeground(new java.awt.Color(51, 51, 51));
         BalanceBarSpent.setText("P749.99");
-        jPanel2.add(BalanceBarSpent, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, -1, -1));
+        TopPannel.add(BalanceBarSpent, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 260));
+        HomePannel.add(TopPannel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 260));
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        BotomPannel.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Afacad", 0, 20)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Today's Expenses");
 
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         jScrollPane1.setOpaque(false);
+
+        scrollfield.setBackground(new java.awt.Color(255, 255, 255));
+        scrollfield.setForeground(new java.awt.Color(255, 255, 255));
+        scrollfield.setLayout(new javax.swing.BoxLayout(scrollfield, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane1.setViewportView(scrollfield);
 
         jPanel6.setOpaque(false);
 
@@ -215,36 +277,82 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(17, Short.MAX_VALUE))
+        javax.swing.GroupLayout BotomPannelLayout = new javax.swing.GroupLayout(BotomPannel);
+        BotomPannel.setLayout(BotomPannelLayout);
+        BotomPannelLayout.setHorizontalGroup(
+            BotomPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BotomPannelLayout.createSequentialGroup()
+                .addGroup(BotomPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(BotomPannelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1))
+                    .addGroup(BotomPannelLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(BotomPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(BotomPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        BotomPannelLayout.setVerticalGroup(
+            BotomPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BotomPannelLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addGap(5, 5, 5)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(435, 435, 435))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 450, 610));
+        HomePannel.add(BotomPannel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 450, 610));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 870));
+        ListPannel.setBackground(new java.awt.Color(255, 255, 255));
+
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane2.setForeground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout ListPannelLayout = new javax.swing.GroupLayout(ListPannel);
+        ListPannel.setLayout(ListPannelLayout);
+        ListPannelLayout.setHorizontalGroup(
+            ListPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ListPannelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ListPannelLayout.setVerticalGroup(
+            ListPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ListPannelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 16, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jLayeredPane1.setLayer(HomePannel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(ListPannel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(ListPannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(HomePannel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                .addComponent(HomePannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(ListPannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        getContentPane().add(jLayeredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 870));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -289,21 +397,34 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel BalanceBarSpent;
     private javax.swing.JLabel BalanceName;
     private javax.swing.JLabel BalanceQuantity;
+    private javax.swing.JPanel BotomPannel;
     private javax.swing.JTextField Date;
     private javax.swing.JTextField Day;
+    private javax.swing.JPanel HomePannel;
+    private javax.swing.JPanel ListPannel;
     private javax.swing.JTextField Month;
+    private javax.swing.JPanel RecordPannel;
+    private javax.swing.JPanel TopPannel;
     private javax.swing.JLabel UserLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPanel scrollfield;
     // End of variables declaration//GEN-END:variables
 }
