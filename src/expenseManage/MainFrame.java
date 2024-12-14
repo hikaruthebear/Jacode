@@ -10,13 +10,11 @@ package expenseManage;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainFrame
-     */
+    
     public MainFrame() {
         initComponents();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,57 +24,103 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        BarButtons = new javax.swing.ButtonGroup();
+        BarPanel = new javax.swing.JPanel();
+        ExpenseButton = new javax.swing.JToggleButton();
+        ExpenseButtonLabel = new javax.swing.JLabel();
+        HomeButton = new javax.swing.JToggleButton();
+        ListButton = new javax.swing.JToggleButton();
+        HomeMainPanel = new javax.swing.JPanel();
+        TopPanel = new javax.swing.JPanel();
         UserLabel = new javax.swing.JLabel();
-        BalanceName = new javax.swing.JLabel();
+        BalanceLabel = new javax.swing.JLabel();
         BalanceQuantity = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
+        BalancePanel = new javax.swing.JPanel();
         BalanceBar = new javax.swing.JProgressBar();
-        BalanceBarLabel = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        Date = new javax.swing.JTextField();
-        Day = new javax.swing.JTextField();
-        Month = new javax.swing.JTextField();
+        BalanceBarPercentage = new javax.swing.JLabel();
+        CalendarPanel = new javax.swing.JPanel();
+        DateNumber = new javax.swing.JTextField();
+        DayName = new javax.swing.JTextField();
+        MonthName = new javax.swing.JTextField();
         BalanceBarSpent = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        BottomPanel = new javax.swing.JPanel();
+        ListLabel = new javax.swing.JLabel();
+        ListSeperator = new javax.swing.JSeparator();
+        ListScrollPane = new javax.swing.JScrollPane();
+        ListMainPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(450, 769));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setMaximumSize(new java.awt.Dimension(466, 769));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        BarPanel.setBackground(new java.awt.Color(255, 255, 255));
+        BarPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(226, 255, 223));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        ExpenseButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/add 1.png"))); // NOI18N
+        ExpenseButton.setBorderPainted(false);
+        ExpenseButton.setContentAreaFilled(false);
+        ExpenseButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/arrow-down-sign-to-navigate.png"))); // NOI18N
+        BarPanel.add(ExpenseButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, 170, 70));
+
+        ExpenseButtonLabel.setBackground(new java.awt.Color(255, 255, 255));
+        ExpenseButtonLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/file_optimized.png"))); // NOI18N
+        BarPanel.add(ExpenseButtonLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, 170, 70));
+
+        BarButtons.add(HomeButton);
+        HomeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home.png"))); // NOI18N
+        HomeButton.setSelected(true);
+        HomeButton.setBorderPainted(false);
+        HomeButton.setContentAreaFilled(false);
+        HomeButton.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home-filled.png"))); // NOI18N
+        HomeButton.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home.png"))); // NOI18N
+        HomeButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home-filled.png"))); // NOI18N
+        HomeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HomeButtonActionPerformed(evt);
+            }
+        });
+        BarPanel.add(HomeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 50, 50));
+
+        BarButtons.add(ListButton);
+        ListButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/menu-burger.png"))); // NOI18N
+        ListButton.setBorderPainted(false);
+        ListButton.setContentAreaFilled(false);
+        ListButton.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/menu-burger -active.png"))); // NOI18N
+        ListButton.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/menu-burger.png"))); // NOI18N
+        ListButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/menu-burger -active.png"))); // NOI18N
+        ListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ListButtonActionPerformed(evt);
+            }
+        });
+        BarPanel.add(ListButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 50, 50));
+
+        getContentPane().add(BarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 750, 450, 100));
+
+        HomeMainPanel.setBackground(new java.awt.Color(255, 255, 255));
+        HomeMainPanel.setMaximumSize(new java.awt.Dimension(466, 769));
+        HomeMainPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TopPanel.setBackground(new java.awt.Color(226, 255, 223));
+        TopPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         UserLabel.setFont(new java.awt.Font("Albert Sans", 1, 24)); // NOI18N
         UserLabel.setForeground(new java.awt.Color(51, 51, 51));
         UserLabel.setText("Hi, User1234");
-        jPanel2.add(UserLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 34, -1, -1));
+        TopPanel.add(UserLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 34, -1, -1));
 
-        BalanceName.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
-        BalanceName.setForeground(new java.awt.Color(51, 51, 51));
-        BalanceName.setText("Balance");
-        jPanel2.add(BalanceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+        BalanceLabel.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
+        BalanceLabel.setForeground(new java.awt.Color(51, 51, 51));
+        BalanceLabel.setText("Balance");
+        TopPanel.add(BalanceLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
 
         BalanceQuantity.setBackground(new java.awt.Color(0, 0, 0));
         BalanceQuantity.setFont(new java.awt.Font("Albert Sans", 1, 48)); // NOI18N
-        BalanceQuantity.setForeground(new java.awt.Color(0, 0, 0));
         BalanceQuantity.setText("P251.99");
-        jPanel2.add(BalanceQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 111, -1, 43));
+        TopPanel.add(BalanceQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 111, -1, 43));
 
-        jPanel4.setBackground(new java.awt.Color(226, 255, 223));
+        BalancePanel.setBackground(new java.awt.Color(226, 255, 223));
 
         BalanceBar.setBackground(new java.awt.Color(255, 255, 255));
         BalanceBar.setToolTipText("");
@@ -84,183 +128,158 @@ public class MainFrame extends javax.swing.JFrame {
         BalanceBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(35, 89, 35)));
         BalanceBar.setOpaque(true);
 
-        BalanceBarLabel.setFont(new java.awt.Font("Albert Sans", 1, 12)); // NOI18N
-        BalanceBarLabel.setForeground(new java.awt.Color(51, 51, 51));
-        BalanceBarLabel.setText("25%");
+        BalanceBarPercentage.setFont(new java.awt.Font("Albert Sans", 1, 12)); // NOI18N
+        BalanceBarPercentage.setForeground(new java.awt.Color(51, 51, 51));
+        BalanceBarPercentage.setText("25%");
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout BalancePanelLayout = new javax.swing.GroupLayout(BalancePanel);
+        BalancePanel.setLayout(BalancePanelLayout);
+        BalancePanelLayout.setHorizontalGroup(
+            BalancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BalancePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(BalanceBarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(BalanceBarPercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(BalanceBar, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        BalancePanelLayout.setVerticalGroup(
+            BalancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BalancePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(BalanceBarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
+                .addGroup(BalancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(BalanceBarPercentage, javax.swing.GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
                     .addComponent(BalanceBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 178, 417, -1));
+        TopPanel.add(BalancePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 178, 417, -1));
 
-        jPanel3.setBackground(new java.awt.Color(226, 255, 223));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        CalendarPanel.setBackground(new java.awt.Color(226, 255, 223));
+        CalendarPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Date.setEditable(false);
-        Date.setBackground(new java.awt.Color(174, 253, 163));
-        Date.setFont(new java.awt.Font("Albert Sans", 1, 48)); // NOI18N
-        Date.setForeground(new java.awt.Color(28, 108, 30));
-        Date.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        Date.setText("01");
-        Date.setFocusable(false);
-        Date.setMaximumSize(new java.awt.Dimension(104, 79));
-        Date.setMinimumSize(new java.awt.Dimension(104, 79));
-        Date.setPreferredSize(new java.awt.Dimension(104, 79));
-        Date.addActionListener(new java.awt.event.ActionListener() {
+        DateNumber.setEditable(false);
+        DateNumber.setBackground(new java.awt.Color(174, 253, 163));
+        DateNumber.setFont(new java.awt.Font("Albert Sans", 1, 48)); // NOI18N
+        DateNumber.setForeground(new java.awt.Color(28, 108, 30));
+        DateNumber.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        DateNumber.setText("01");
+        DateNumber.setFocusable(false);
+        DateNumber.setMaximumSize(new java.awt.Dimension(104, 79));
+        DateNumber.setMinimumSize(new java.awt.Dimension(104, 79));
+        DateNumber.setPreferredSize(new java.awt.Dimension(104, 79));
+        DateNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DateActionPerformed(evt);
+                DateNumberActionPerformed(evt);
             }
         });
-        jPanel3.add(Date, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 100, 60));
+        CalendarPanel.add(DateNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 100, 60));
 
-        Day.setEditable(false);
-        Day.setBackground(new java.awt.Color(0, 102, 0));
-        Day.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
-        Day.setForeground(new java.awt.Color(255, 255, 255));
-        Day.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        Day.setText("Tuesday");
-        Day.setFocusable(false);
-        Day.setMinimumSize(new java.awt.Dimension(104, 37));
-        Day.addActionListener(new java.awt.event.ActionListener() {
+        DayName.setEditable(false);
+        DayName.setBackground(new java.awt.Color(0, 102, 0));
+        DayName.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
+        DayName.setForeground(new java.awt.Color(255, 255, 255));
+        DayName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        DayName.setText("Tuesday");
+        DayName.setFocusable(false);
+        DayName.setMinimumSize(new java.awt.Dimension(104, 37));
+        DayName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DayActionPerformed(evt);
+                DayNameActionPerformed(evt);
             }
         });
-        jPanel3.add(Day, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 100, 30));
+        CalendarPanel.add(DayName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 100, 30));
 
-        Month.setEditable(false);
-        Month.setBackground(new java.awt.Color(87, 184, 91));
-        Month.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
-        Month.setForeground(new java.awt.Color(255, 255, 255));
-        Month.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        Month.setText("January");
-        Month.setFocusable(false);
-        Month.setMaximumSize(new java.awt.Dimension(104, 37));
-        Month.setMinimumSize(new java.awt.Dimension(104, 37));
-        Month.setPreferredSize(new java.awt.Dimension(104, 37));
-        Month.addActionListener(new java.awt.event.ActionListener() {
+        MonthName.setEditable(false);
+        MonthName.setBackground(new java.awt.Color(87, 184, 91));
+        MonthName.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
+        MonthName.setForeground(new java.awt.Color(255, 255, 255));
+        MonthName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        MonthName.setText("January");
+        MonthName.setFocusable(false);
+        MonthName.setMaximumSize(new java.awt.Dimension(104, 37));
+        MonthName.setMinimumSize(new java.awt.Dimension(104, 37));
+        MonthName.setPreferredSize(new java.awt.Dimension(104, 37));
+        MonthName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MonthActionPerformed(evt);
+                MonthNameActionPerformed(evt);
             }
         });
-        jPanel3.add(Month, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 30));
+        CalendarPanel.add(MonthName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 30));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(336, 28, 101, -1));
+        TopPanel.add(CalendarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(336, 28, 101, -1));
 
         BalanceBarSpent.setFont(new java.awt.Font("Albert Sans", 0, 18)); // NOI18N
         BalanceBarSpent.setForeground(new java.awt.Color(51, 51, 51));
         BalanceBarSpent.setText("P749.99");
-        jPanel2.add(BalanceBarSpent, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, -1, -1));
+        TopPanel.add(BalanceBarSpent, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 260));
+        HomeMainPanel.add(TopPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 260));
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        BottomPanel.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Afacad", 0, 20)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Today's Expenses");
+        ListLabel.setFont(new java.awt.Font("Afacad", 0, 20)); // NOI18N
+        ListLabel.setText("Today's Expenses");
 
-        jScrollPane1.setOpaque(false);
+        ListScrollPane.setOpaque(false);
 
-        jPanel6.setOpaque(false);
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home.png"))); // NOI18N
-
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/menu-burger.png"))); // NOI18N
-
-        jLabel4.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/square-plus.png"))); // NOI18N
-        jLabel4.setOpaque(true);
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel2)
-                .addGap(68, 68, 68)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        javax.swing.GroupLayout BottomPanelLayout = new javax.swing.GroupLayout(BottomPanel);
+        BottomPanel.setLayout(BottomPanelLayout);
+        BottomPanelLayout.setHorizontalGroup(
+            BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BottomPanelLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2))
-                .addContainerGap(20, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ListSeperator, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        BottomPanelLayout.setVerticalGroup(
+            BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BottomPanelLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel1)
+                .addComponent(ListLabel)
                 .addGap(5, 5, 5)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ListSeperator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(435, 435, 435))
+                .addComponent(ListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(529, 529, 529))
         );
 
-        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 450, 610));
+        HomeMainPanel.add(BottomPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 450, 490));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 870));
+        getContentPane().add(HomeMainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, -1));
+
+        ListMainPanel.setBackground(new java.awt.Color(255, 255, 255));
+        ListMainPanel.setMaximumSize(new java.awt.Dimension(466, 769));
+        ListMainPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().add(ListMainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 750));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void DateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DateActionPerformed
+    private void DateNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DateNumberActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_DateActionPerformed
+    }//GEN-LAST:event_DateNumberActionPerformed
 
-    private void MonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MonthActionPerformed
+    private void MonthNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MonthNameActionPerformed
         // TODO add your handling code here:
 
-    }//GEN-LAST:event_MonthActionPerformed
+    }//GEN-LAST:event_MonthNameActionPerformed
 
-    private void DayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DayActionPerformed
+    private void DayNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DayNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_DayActionPerformed
+    }//GEN-LAST:event_DayNameActionPerformed
+
+    private void HomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeButtonActionPerformed
+        HomeMainPanel.setVisible(true);
+        ListMainPanel.setVisible(false);
+    }//GEN-LAST:event_HomeButtonActionPerformed
+
+    private void ListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ListButtonActionPerformed
+        HomeMainPanel.setVisible(false);
+        ListMainPanel.setVisible(true);
+    }//GEN-LAST:event_ListButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -285,25 +304,28 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar BalanceBar;
-    private javax.swing.JLabel BalanceBarLabel;
+    private javax.swing.JLabel BalanceBarPercentage;
     private javax.swing.JLabel BalanceBarSpent;
-    private javax.swing.JLabel BalanceName;
+    private javax.swing.JLabel BalanceLabel;
+    private javax.swing.JPanel BalancePanel;
     private javax.swing.JLabel BalanceQuantity;
-    private javax.swing.JTextField Date;
-    private javax.swing.JTextField Day;
-    private javax.swing.JTextField Month;
+    private javax.swing.ButtonGroup BarButtons;
+    private javax.swing.JPanel BarPanel;
+    private javax.swing.JPanel BottomPanel;
+    private javax.swing.JPanel CalendarPanel;
+    private javax.swing.JTextField DateNumber;
+    private javax.swing.JTextField DayName;
+    private javax.swing.JToggleButton ExpenseButton;
+    private javax.swing.JLabel ExpenseButtonLabel;
+    private javax.swing.JToggleButton HomeButton;
+    private javax.swing.JPanel HomeMainPanel;
+    private javax.swing.JToggleButton ListButton;
+    private javax.swing.JLabel ListLabel;
+    private javax.swing.JPanel ListMainPanel;
+    private javax.swing.JScrollPane ListScrollPane;
+    private javax.swing.JSeparator ListSeperator;
+    private javax.swing.JTextField MonthName;
+    private javax.swing.JPanel TopPanel;
     private javax.swing.JLabel UserLabel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }
