@@ -14,13 +14,13 @@ public class Record extends javax.swing.JPanel {
 
     String name;
     String time;
-    double quantity;
+    double amount;
     boolean isIncome;
     
     public Record (String name, String time, double quantity, boolean isIncome) {
         this.name = name;
         this.time = time;
-        this.quantity = quantity;
+        this.amount = amount;
         this.isIncome = isIncome;
         Icon income = new ImageIcon("src/resources/income.png");
         Icon expense = new ImageIcon("src/resources/expense.png");
@@ -38,14 +38,14 @@ public class Record extends javax.swing.JPanel {
             TypeIcon.setIcon(income);
             ItemTime.setForeground(incometimecolor);
             ItemQuantity.setForeground(incomequantitycolor);
-            ItemQuantity.setText(String.format("+%.2f P", quantity));
+            ItemQuantity.setText(String.format("+%.2f P", amount));
         }
         else {
             ListItemPanel.setBackground(expensepanel);
             TypeIcon.setIcon(expense);
             ItemTime.setForeground(expensetimecolor);
             ItemQuantity.setForeground(expensequantitycolor);
-            ItemQuantity.setText(String.format("-%.2f P", quantity));
+            ItemQuantity.setText(String.format("-%.2f P", amount));
         }
         
         ItemName.setText(name);

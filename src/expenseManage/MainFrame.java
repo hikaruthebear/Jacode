@@ -4,6 +4,8 @@
  */
 package expenseManage;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author User-PC
@@ -14,21 +16,57 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
         
+        SwitchtoHome();        
         //pwede tanggalin to tinest ko lang
-        //String name, String time, float quantity, boolean isIncome (if income yes, if expense false)
-        Record record1 = new Record("Apples", "12:30 PM", 5.5, true);
-        HomeList.add (record1);
-        Record record2 = new Record("Bananas", "8:45 AM", 10.0, false);
-        HomeList.add (record2);
-        Record record3 = new Record("Oranges", "3:15 PM", 2.75, true);
-        HomeList.add(record3);
-         Record record4 = new Record("Grapes", "6:00 PM", 0.0, false);
-        HomeList.add(record4);
-        Record record5 = new Record("Mangoes", "11:00 AM", 7.25, true)  ;
-        HomeList.add(record5);
+        //String name, String time, double amount, boolean isIncome (if income yes, if expense false)
+        ArrayList<Record> record1 = new ArrayList<>();
+        record1.add(new Record("Grocery Shopping", "11:24 AM", 45.67, false));
+        record1.add(new Record("Salary Deposit", "9:00 AM", 1500.00, true));
+        record1.add(new Record("Gym Membership Payment", "7:45 PM", 25.00, false));
+        record1.add(new Record("Gift Received", "3:15 PM", 100.00, true));
+        record1.add(new Record("Utility Bill Payment", "5:30 PM", 78.90, false));
+        RecordDay test = new RecordDay (this, "January 01, 2024", "Tuesday", record1);
+        DayList.add(test);
+
        //<--->
     }
     
+    public void SwitchtoHome() {
+        HomeMainPanel.setVisible(true);
+        ListMainPanel.setVisible(false);
+        HomeButton.setSelected(true);
+        ListButton.setSelected(false);
+        ExpenseButton.setSelected(false);
+    }
+    
+    public void SwitchtoList() {
+        HomeMainPanel.setVisible(false);
+        ListMainPanel.setVisible(true);
+        HomeButton.setSelected(false);
+        ListButton.setSelected(true);
+        ExpenseButton.setSelected(false);
+    }
+    
+    public void SetTopPanelInfo(double balance, double spent) { //may date pa to and SHIT!!!!!!!!!
+        if (balance - spent <= 0) {
+            BalanceQuantity.setText("P0.00 !!");
+            BalanceBar.setValue(0);
+            BalanceBarPercentage.setText("0%");
+            BalanceBarSpent.setText(String.format("P%.2f", spent));
+        }
+        else {
+            BalanceQuantity.setText(String.format("P%.2f", balance - spent));
+            int tempbalance = (int)(balance - spent) / 100;
+            BalanceBar.setValue(tempbalance);
+            BalanceBarPercentage.setText(String.format("%d%%", tempbalance));
+        }
+    }
+    
+    public void ParseList (ArrayList<Record> records) {
+        for (Record record : records) {
+            HomeList.add(record);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -63,6 +101,9 @@ public class MainFrame extends javax.swing.JFrame {
         HomeListContainer = new javax.swing.JScrollPane();
         HomeList = new javax.swing.JPanel();
         ListMainPanel = new javax.swing.JPanel();
+        ListLabel1 = new javax.swing.JLabel();
+        ListDayContainer = new javax.swing.JScrollPane();
+        DayList = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(450, 769));
@@ -87,8 +128,7 @@ public class MainFrame extends javax.swing.JFrame {
         HomeButton.setSelected(true);
         HomeButton.setBorderPainted(false);
         HomeButton.setContentAreaFilled(false);
-        HomeButton.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home-filled.png"))); // NOI18N
-        HomeButton.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home.png"))); // NOI18N
+        HomeButton.setRolloverEnabled(false);
         HomeButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home-filled.png"))); // NOI18N
         HomeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,8 +141,7 @@ public class MainFrame extends javax.swing.JFrame {
         ListButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/menu-burger.png"))); // NOI18N
         ListButton.setBorderPainted(false);
         ListButton.setContentAreaFilled(false);
-        ListButton.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/menu-burger -active.png"))); // NOI18N
-        ListButton.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/menu-burger.png"))); // NOI18N
+        ListButton.setRolloverEnabled(false);
         ListButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/menu-burger -active.png"))); // NOI18N
         ListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -278,6 +317,22 @@ public class MainFrame extends javax.swing.JFrame {
         ListMainPanel.setBackground(new java.awt.Color(255, 255, 255));
         ListMainPanel.setMaximumSize(new java.awt.Dimension(466, 769));
         ListMainPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        ListLabel1.setFont(new java.awt.Font("Afacad", 1, 26)); // NOI18N
+        ListLabel1.setText("Today's Expenses");
+        ListMainPanel.add(ListLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
+
+        ListDayContainer.setBorder(null);
+        ListDayContainer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        ListDayContainer.setOpaque(false);
+
+        DayList.setBackground(new java.awt.Color(255, 255, 255));
+        DayList.setForeground(new java.awt.Color(255, 255, 255));
+        DayList.setLayout(new javax.swing.BoxLayout(DayList, javax.swing.BoxLayout.Y_AXIS));
+        ListDayContainer.setViewportView(DayList);
+
+        ListMainPanel.add(ListDayContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 450, 660));
+
         getContentPane().add(ListMainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 750));
 
         pack();
@@ -297,13 +352,11 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_DayNameActionPerformed
 
     private void HomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeButtonActionPerformed
-        HomeMainPanel.setVisible(true);
-        ListMainPanel.setVisible(false);
+        SwitchtoHome();
     }//GEN-LAST:event_HomeButtonActionPerformed
 
     private void ListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ListButtonActionPerformed
-        HomeMainPanel.setVisible(false);
-        ListMainPanel.setVisible(true);
+        SwitchtoList();
     }//GEN-LAST:event_ListButtonActionPerformed
 
     /**
@@ -339,6 +392,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel BottomPanel;
     private javax.swing.JPanel CalendarPanel;
     private javax.swing.JTextField DateNumber;
+    private javax.swing.JPanel DayList;
     private javax.swing.JTextField DayName;
     private javax.swing.JToggleButton ExpenseButton;
     private javax.swing.JLabel ExpenseButtonLabel;
@@ -347,7 +401,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane HomeListContainer;
     private javax.swing.JPanel HomeMainPanel;
     private javax.swing.JToggleButton ListButton;
+    private javax.swing.JScrollPane ListDayContainer;
     private javax.swing.JLabel ListLabel;
+    private javax.swing.JLabel ListLabel1;
     private javax.swing.JPanel ListMainPanel;
     private javax.swing.JSeparator ListSeperator;
     private javax.swing.JTextField MonthName;
