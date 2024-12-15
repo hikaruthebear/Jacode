@@ -27,6 +27,15 @@ public class MainFrame extends javax.swing.JFrame {
         record1.add(new Record("Utility Bill Payment", "5:30 PM", 78.90, false));
         RecordDay test = new RecordDay (this, "January 01, 2024", "Tuesday", record1);
         DayList.add(test);
+        
+        ArrayList<Record> record2 = new ArrayList<>();
+        record2.add(new Record("Grocery Shopping", "11:24 AM", 45.67, false));
+        record2.add(new Record("Salary Deposit", "9:00 AM", 50.00, true));
+        record2.add(new Record("Gym Membership Payment", "7:45 PM", 25.00, false));
+        record2.add(new Record("Gift Received", "3:15 PM", 50.00, true));
+        record2.add(new Record("Utility Bill Payment", "5:30 PM", 78.90, false));
+        RecordDay test1 = new RecordDay (this, "January 01, 2024", "Tuesday", record2);
+        DayList.add(test1);
 
        //<--->
     }
@@ -49,16 +58,17 @@ public class MainFrame extends javax.swing.JFrame {
     
     public void SetTopPanelInfo(double balance, double spent) { //may date pa to and SHIT!!!!!!!!!
         if (balance - spent <= 0) {
-            BalanceQuantity.setText("P0.00 !!");
+            BalanceQuantity.setText(String.format("₱%.2f !!", balance - spent));
             BalanceBar.setValue(0);
             BalanceBarPercentage.setText("0%");
-            BalanceBarSpent.setText(String.format("P%.2f", spent));
+            BalanceBarSpent.setText(String.format("₱%.2f", spent));
         }
         else {
-            BalanceQuantity.setText(String.format("P%.2f", balance - spent));
-            int tempbalance = (int)(balance - spent) / 100;
-            BalanceBar.setValue(tempbalance);
-            BalanceBarPercentage.setText(String.format("%d%%", tempbalance));
+            BalanceQuantity.setText(String.format("₱%.2f", balance - spent));
+            int tempvalue = (int)(((double)(balance - spent) / balance) * 100);
+            BalanceBar.setValue(tempvalue);
+            BalanceBarPercentage.setText(String.format("%d%%", tempvalue));
+            BalanceBarSpent.setText(String.format("₱%.2f", spent));
         }
     }
     

@@ -51,13 +51,13 @@ public class RecordDay extends javax.swing.JPanel {
             ListItemPanel.setBackground(negativepanel);
             DateLabel.setForeground(negativedatecolor);
             TotalQuantity.setForeground(negativequantitycolor);
-            TotalQuantity.setText(String.format("-%.2f P", totalamount));
+            TotalQuantity.setText(String.format("%.2f ₱", totalamount));
         }
         else {
             ListItemPanel.setBackground(positivepanel);
             DateLabel.setForeground(positivedatecolor);
             TotalQuantity.setForeground(positivequantitycolor);
-            TotalQuantity.setText(String.format("+%.2f P", totalamount));
+            TotalQuantity.setText(String.format("%.2f ₱", totalamount));
         }
         
         DayLabel.setText(day);

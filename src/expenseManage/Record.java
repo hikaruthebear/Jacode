@@ -17,7 +17,7 @@ public class Record extends javax.swing.JPanel {
     double amount;
     boolean isIncome;
     
-    public Record (String name, String time, double quantity, boolean isIncome) {
+    public Record (String name, String time, double amount, boolean isIncome) {
         this.name = name;
         this.time = time;
         this.amount = amount;
@@ -38,14 +38,14 @@ public class Record extends javax.swing.JPanel {
             TypeIcon.setIcon(income);
             ItemTime.setForeground(incometimecolor);
             ItemQuantity.setForeground(incomequantitycolor);
-            ItemQuantity.setText(String.format("+%.2f P", amount));
+            ItemQuantity.setText(String.format("+%.2f ₱", amount));
         }
         else {
             ListItemPanel.setBackground(expensepanel);
             TypeIcon.setIcon(expense);
             ItemTime.setForeground(expensetimecolor);
             ItemQuantity.setForeground(expensequantitycolor);
-            ItemQuantity.setText(String.format("-%.2f P", amount));
+            ItemQuantity.setText(String.format("-%.2f ₱", amount));
         }
         
         ItemName.setText(name);
