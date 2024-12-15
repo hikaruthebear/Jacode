@@ -13,6 +13,20 @@ public class MainFrame extends javax.swing.JFrame {
     
     public MainFrame() {
         initComponents();
+        
+        //pwede tanggalin to tinest ko lang
+        //String name, String time, float quantity, boolean isIncome (if income yes, if expense false)
+        Record record1 = new Record("Apples", "12:30 PM", 5.5, true);
+        HomeList.add (record1);
+        Record record2 = new Record("Bananas", "8:45 AM", 10.0, false);
+        HomeList.add (record2);
+        Record record3 = new Record("Oranges", "3:15 PM", 2.75, true);
+        HomeList.add(record3);
+         Record record4 = new Record("Grapes", "6:00 PM", 0.0, false);
+        HomeList.add(record4);
+        Record record5 = new Record("Mangoes", "11:00 AM", 7.25, true)  ;
+        HomeList.add(record5);
+       //<--->
     }
     
     /**
@@ -46,7 +60,8 @@ public class MainFrame extends javax.swing.JFrame {
         BottomPanel = new javax.swing.JPanel();
         ListLabel = new javax.swing.JLabel();
         ListSeperator = new javax.swing.JSeparator();
-        ListScrollPane = new javax.swing.JScrollPane();
+        HomeListContainer = new javax.swing.JScrollPane();
+        HomeList = new javax.swing.JPanel();
         ListMainPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -220,7 +235,14 @@ public class MainFrame extends javax.swing.JFrame {
         ListLabel.setFont(new java.awt.Font("Afacad", 0, 20)); // NOI18N
         ListLabel.setText("Today's Expenses");
 
-        ListScrollPane.setOpaque(false);
+        HomeListContainer.setBorder(null);
+        HomeListContainer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        HomeListContainer.setOpaque(false);
+
+        HomeList.setBackground(new java.awt.Color(255, 255, 255));
+        HomeList.setForeground(new java.awt.Color(255, 255, 255));
+        HomeList.setLayout(new javax.swing.BoxLayout(HomeList, javax.swing.BoxLayout.Y_AXIS));
+        HomeListContainer.setViewportView(HomeList);
 
         javax.swing.GroupLayout BottomPanelLayout = new javax.swing.GroupLayout(BottomPanel);
         BottomPanel.setLayout(BottomPanelLayout);
@@ -230,9 +252,12 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ListSeperator, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(ListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(59, Short.MAX_VALUE))
+            .addGroup(BottomPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(HomeListContainer)
+                .addContainerGap())
         );
         BottomPanelLayout.setVerticalGroup(
             BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,9 +266,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(ListLabel)
                 .addGap(5, 5, 5)
                 .addComponent(ListSeperator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(ListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(529, 529, 529))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(HomeListContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         HomeMainPanel.add(BottomPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 450, 490));
@@ -318,11 +343,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToggleButton ExpenseButton;
     private javax.swing.JLabel ExpenseButtonLabel;
     private javax.swing.JToggleButton HomeButton;
+    private javax.swing.JPanel HomeList;
+    private javax.swing.JScrollPane HomeListContainer;
     private javax.swing.JPanel HomeMainPanel;
     private javax.swing.JToggleButton ListButton;
     private javax.swing.JLabel ListLabel;
     private javax.swing.JPanel ListMainPanel;
-    private javax.swing.JScrollPane ListScrollPane;
     private javax.swing.JSeparator ListSeperator;
     private javax.swing.JTextField MonthName;
     private javax.swing.JPanel TopPanel;
