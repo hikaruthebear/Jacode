@@ -82,6 +82,9 @@ public class RecordDay extends javax.swing.JPanel {
         TotalQuantity = new javax.swing.JLabel();
 
         setFocusable(false);
+        setMaximumSize(new java.awt.Dimension(434, 113));
+        setMinimumSize(new java.awt.Dimension(434, 113));
+        setOpaque(false);
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         ListItemContainer.setFocusable(false);

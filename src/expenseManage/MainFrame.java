@@ -91,10 +91,6 @@ public class MainFrame extends javax.swing.JFrame {
         ExpenseButtonLabel = new javax.swing.JLabel();
         HomeButton = new javax.swing.JToggleButton();
         ListButton = new javax.swing.JToggleButton();
-        ListMainPanel = new javax.swing.JPanel();
-        ListLabel1 = new javax.swing.JLabel();
-        ListDayContainer = new javax.swing.JScrollPane();
-        DayList = new javax.swing.JPanel();
         HomeMainPanel = new javax.swing.JPanel();
         TopPanel = new javax.swing.JPanel();
         UserLabel = new javax.swing.JLabel();
@@ -113,6 +109,10 @@ public class MainFrame extends javax.swing.JFrame {
         ListSeperator = new javax.swing.JSeparator();
         HomeListContainer = new javax.swing.JScrollPane();
         HomeList = new javax.swing.JPanel();
+        ListMainPanel = new javax.swing.JPanel();
+        ListLabel1 = new javax.swing.JLabel();
+        ListDayContainer = new javax.swing.JScrollPane();
+        DayList = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(450, 769));
@@ -160,27 +160,6 @@ public class MainFrame extends javax.swing.JFrame {
         BarPanel.add(ListButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 50, 50));
 
         getContentPane().add(BarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 750, 450, 100));
-
-        ListMainPanel.setBackground(new java.awt.Color(255, 255, 255));
-        ListMainPanel.setMaximumSize(new java.awt.Dimension(466, 769));
-        ListMainPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        ListLabel1.setFont(new java.awt.Font("Afacad", 1, 26)); // NOI18N
-        ListLabel1.setText("Daily Expenses");
-        ListMainPanel.add(ListLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
-
-        ListDayContainer.setBorder(null);
-        ListDayContainer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        ListDayContainer.setOpaque(false);
-
-        DayList.setBackground(new java.awt.Color(255, 255, 255));
-        DayList.setForeground(new java.awt.Color(255, 255, 255));
-        DayList.setLayout(new javax.swing.BoxLayout(DayList, javax.swing.BoxLayout.Y_AXIS));
-        ListDayContainer.setViewportView(DayList);
-
-        ListMainPanel.add(ListDayContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 450, 660));
-
-        getContentPane().add(ListMainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 750));
 
         HomeMainPanel.setBackground(new java.awt.Color(255, 255, 255));
         HomeMainPanel.setMaximumSize(new java.awt.Dimension(466, 769));
@@ -343,6 +322,27 @@ public class MainFrame extends javax.swing.JFrame {
         HomeMainPanel.add(BottomPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 450, 490));
 
         getContentPane().add(HomeMainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, -1));
+
+        ListMainPanel.setBackground(new java.awt.Color(255, 255, 255));
+        ListMainPanel.setMaximumSize(new java.awt.Dimension(466, 769));
+        ListMainPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        ListLabel1.setFont(new java.awt.Font("Afacad", 1, 26)); // NOI18N
+        ListLabel1.setText("Daily Expenses");
+        ListMainPanel.add(ListLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
+
+        ListDayContainer.setBorder(null);
+        ListDayContainer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        ListDayContainer.setOpaque(false);
+
+        DayList.setBackground(new java.awt.Color(255, 255, 255));
+        DayList.setForeground(new java.awt.Color(255, 255, 255));
+        DayList.setLayout(new javax.swing.BoxLayout(DayList, javax.swing.BoxLayout.Y_AXIS));
+        ListDayContainer.setViewportView(DayList);
+
+        ListMainPanel.add(ListDayContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 450, 660));
+
+        getContentPane().add(ListMainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 750));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

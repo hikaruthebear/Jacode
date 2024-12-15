@@ -69,8 +69,8 @@ public class Record extends javax.swing.JPanel {
         ItemTime = new javax.swing.JLabel();
         ItemQuantity = new javax.swing.JLabel();
 
-        setMaximumSize(new java.awt.Dimension(438, 120));
-        setMinimumSize(new java.awt.Dimension(438, 120));
+        setMaximumSize(new java.awt.Dimension(434, 113));
+        setMinimumSize(new java.awt.Dimension(434, 113));
         setOpaque(false);
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
