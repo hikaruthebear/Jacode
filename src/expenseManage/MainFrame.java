@@ -7,8 +7,8 @@ package expenseManage;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import javax.swing.event.*;
+import java.awt.event.*;
 
 /**
  *
@@ -16,6 +16,9 @@ import java.awt.event.FocusListener;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+        ArrayList<Record> current = new ArrayList<>();
+        boolean currenttype;
+    
     public MainFrame() {
         
         initComponents();
@@ -54,6 +57,7 @@ public class MainFrame extends javax.swing.JFrame {
         PopUpPanel.setVisible(false);
         ExpenseButton.setIcon(plus);
         ItemPanel.setVisible(false);
+        HomeListContainer.setWheelScrollingEnabled(true);
     }
 
     public void SwitchtoList() {
@@ -69,7 +73,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public void SetTopPanelInfo(double balance, double spent) { //may date pa to and SHIT!!!!!!!!!
-        if (balance - spent <= 0) {
+        if (balance - spent < 0) {
             BalanceQuantity.setText(String.format("₱%.2f !!", balance - spent));
             BalanceBar.setValue(0);
             BalanceBarPercentage.setText("0%");
@@ -84,6 +88,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public void ParseList(ArrayList<Record> records) {
+        HomeList.removeAll();
         for (Record record : records) {
             HomeList.add(record);
         }
@@ -93,31 +98,59 @@ public class MainFrame extends javax.swing.JFrame {
         NameField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                // Hide the label when the field gains focus
                 NameLabel.setVisible(false);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                // Show the label if the field is empty when focus is lost
                 if (NameField.getText().trim().isEmpty()) {
                     NameLabel.setVisible(true);
                 }
             }
         });
+        NameField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                ValidateInput();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                ValidateInput();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                ValidateInput();
+            }
+        });
         TimeField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                // Hide the label when the field gains focus
                 TimeLabel.setVisible(false);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                // Show the label if the field is empty when focus is lost
                 if (TimeField.getText().trim().isEmpty()) {
                     TimeLabel.setVisible(true);
                 }
+            }
+        });
+        TimeField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                ValidateInput();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                ValidateInput();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                ValidateInput();
             }
         });
         AmountField.addFocusListener(new FocusListener() {
@@ -129,13 +162,41 @@ public class MainFrame extends javax.swing.JFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                // Show the label if the field is empty when focus is lost
                 if (AmountField.getText().trim().isEmpty()) {
                     AmountLabel.setVisible(true);
                 }
             }
         });
+        AmountField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                ValidateInput();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                ValidateInput();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                ValidateInput();
+            }
+        });
     }
+    
+    public void ValidateInput() {
+                String amount = AmountField.getText();
+                String name = NameField.getText();
+                String time = TimeField.getText();
+                String regex = "^\\d*\\.?\\d+$";
+                
+                if (amount.matches(regex) && !name.isEmpty() && !time.isEmpty()) {
+                    ConfirmButton.setEnabled(true);
+                } else {
+                    ConfirmButton.setEnabled(false); 
+                }
+            }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -149,11 +210,12 @@ public class MainFrame extends javax.swing.JFrame {
         BarButtons = new javax.swing.ButtonGroup();
         ItemPanel = new javax.swing.JPanel();
         NameLabel = new javax.swing.JLabel();
-        TimeLabel = new javax.swing.JLabel();
         AmountLabel = new javax.swing.JLabel();
         NameField = new javax.swing.JTextField();
-        TimeField = new javax.swing.JTextField();
         AmountField = new javax.swing.JTextField();
+        ConfirmButton = new javax.swing.JButton();
+        TimeLabel = new javax.swing.JLabel();
+        TimeField = new javax.swing.JTextField();
         PopUpPanel = new javax.swing.JPanel();
         AddIncomeButton = new javax.swing.JButton();
         AddExpenseButton = new javax.swing.JButton();
@@ -193,17 +255,15 @@ public class MainFrame extends javax.swing.JFrame {
         ItemPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         NameLabel.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
+        NameLabel.setForeground(new java.awt.Color(153, 153, 153));
         NameLabel.setText("Name of Expense");
         ItemPanel.add(NameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 410, 30));
 
-        TimeLabel.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
-        TimeLabel.setText("Time");
-        ItemPanel.add(TimeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 120, 50));
-
         AmountLabel.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
+        AmountLabel.setForeground(new java.awt.Color(153, 153, 153));
         AmountLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         AmountLabel.setText("Amount");
-        ItemPanel.add(AmountLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, 130, 50));
+        ItemPanel.add(AmountLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 130, 50));
 
         NameField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         NameField.addActionListener(new java.awt.event.ActionListener() {
@@ -213,12 +273,26 @@ public class MainFrame extends javax.swing.JFrame {
         });
         ItemPanel.add(NameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 30, 420, 50));
 
-        TimeField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        ItemPanel.add(TimeField, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 98, 140, 50));
-
         AmountField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         AmountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        ItemPanel.add(AmountField, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, 140, 50));
+        ItemPanel.add(AmountField, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, 150, 50));
+
+        ConfirmButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Plus.png"))); // NOI18N
+        ConfirmButton.setEnabled(false);
+        ConfirmButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ConfirmButtonActionPerformed(evt);
+            }
+        });
+        ItemPanel.add(ConfirmButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 100, 80, 50));
+
+        TimeLabel.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
+        TimeLabel.setForeground(new java.awt.Color(153, 153, 153));
+        TimeLabel.setText("Time");
+        ItemPanel.add(TimeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 130, 50));
+
+        TimeField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        ItemPanel.add(TimeField, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 140, 50));
 
         getContentPane().add(ItemPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 450, 180));
 
@@ -528,17 +602,21 @@ public class MainFrame extends javax.swing.JFrame {
         Color income = new Color(131, 255, 158);
         ItemPanel.setBackground(income);
         ItemPanel.setVisible(true);
+        HomeListContainer.setWheelScrollingEnabled(false);
+        currenttype = true;
         PopUpPanel.setVisible(false);
         ItemChecks();
     }//GEN-LAST:event_AddIncomeButtonActionPerformed
 
     private void ExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExpenseButtonActionPerformed
+        HomeListContainer.setWheelScrollingEnabled(false);
         if (HomeMainPanel.isShowing()) {
             if (ExpenseButton.isSelected()) {
                 PopUpPanel.setVisible(true);
             } else {
                 PopUpPanel.setVisible(false);
                 ItemPanel.setVisible(false);
+                HomeListContainer.setWheelScrollingEnabled(true);
             }
         }
         else {
@@ -551,6 +629,8 @@ public class MainFrame extends javax.swing.JFrame {
         Color expense = new Color(255, 131, 131);
         ItemPanel.setBackground(expense);
         ItemPanel.setVisible(true);
+        HomeListContainer.setWheelScrollingEnabled(false);
+        currenttype = false;
         PopUpPanel.setVisible(false);
         ItemChecks();
     }//GEN-LAST:event_AddExpenseButtonActionPerformed
@@ -558,6 +638,21 @@ public class MainFrame extends javax.swing.JFrame {
     private void NameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameFieldActionPerformed
 
     }//GEN-LAST:event_NameFieldActionPerformed
+
+    private void ConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmButtonActionPerformed
+        String name = NameField.getText();
+        String time = TimeField.getText();
+        double amount = Double.parseDouble(AmountField.getText());
+        boolean type = currenttype;
+        
+        current.add(new Record(name, time, amount, type));
+        
+        NameField.setText("");
+        TimeField.setText("");
+        AmountField.setText("");
+        ParseList(current);
+        SwitchtoHome();
+    }//GEN-LAST:event_ConfirmButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -595,6 +690,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel BarPanel;
     private javax.swing.JPanel BottomPanel;
     private javax.swing.JPanel CalendarPanel;
+    private javax.swing.JButton ConfirmButton;
     private javax.swing.JTextField DateNumber;
     private javax.swing.JPanel DayList;
     private javax.swing.JTextField DayName;
