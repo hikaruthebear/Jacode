@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  *
@@ -16,11 +19,11 @@ import java.awt.event.*;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-        ArrayList<Record> current = new ArrayList<>();
-        boolean currenttype;
-    
+    ArrayList<Record> current = new ArrayList<>();
+    boolean currenttype;
+
     public MainFrame() {
-        
+
         initComponents();
 
         SwitchtoHome();
@@ -48,7 +51,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     public void SwitchtoHome() {
         Icon plus = new ImageIcon("src/resources/add 1.png");
-        
+
         HomeMainPanel.setVisible(true);
         ListMainPanel.setVisible(false);
         HomeButton.setSelected(true);
@@ -78,8 +81,7 @@ public class MainFrame extends javax.swing.JFrame {
         for (Record record : records) {
             if (record.isIncome) {
                 balance += record.amount;
-            }
-            else {
+            } else {
                 spent += record.amount;
             }
         }
@@ -98,13 +100,33 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public void ParseList(ArrayList<Record> records) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+
+        records.sort((now, next) -> {
+
+            LocalTime nowtime = LocalTime.parse(now.time.toUpperCase(), formatter); //string to time houdini magic
+            LocalTime nexttime = LocalTime.parse(next.time.toUpperCase(), formatter);
+
+            boolean nowpm = now.time.contains("PM"); //kung pm ini
+            boolean nextpm = next.time.contains("PM");
+
+            if (nowpm && !nextpm) { // pm to am so now muna
+                return -1;
+            } else if (!nowpm && nextpm) {// am to pm so next muna
+                return 1;
+            } else {
+                return nexttime.compareTo(nowtime); // ie kung 5 next, 3 now, return positive tas switch para 3, 5 (asc. order)
+            }
+        });
+
         HomeList.removeAll();
         for (Record record : records) {
             HomeList.add(record);
         }
+        current = records;
     }
-    
-    public void ItemChecks () {
+
+    public void ItemChecks() {
         NameField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -194,20 +216,47 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public void ValidateInput() {
-                String amount = AmountField.getText();
-                String name = NameField.getText();
-                String time = TimeField.getText();
-                String regex = "^\\d*\\.?\\d+$";
-                
-                if (amount.matches(regex) && !name.isEmpty() && !time.isEmpty()) {
-                    ConfirmButton.setEnabled(true);
-                } else {
-                    ConfirmButton.setEnabled(false); 
-                }
-            }
-    
+        String amount = AmountField.getText();
+        String name = NameField.getText();
+        String time = TimeField.getText();
+        String amountstruct = "^\\d*\\.?\\d+$";
+        /*
+        ^= Anchors the regex to the start of the string.
+        \\d* = Matches zero or more digits (\\d is shorthand for [0-9]).
+              The * quantifier means zero or more occurrences.
+              This part ensures that the input can start with any number of digits (including none).
+        \\.? = Matches an optional decimal point (\\. matches a literal period .):
+               The ? quantifier means zero or one occurrence.
+               This part allows for a decimal point but doesn't require it.
+        \\d+ = Matches one or more digits.
+               The + quantifier ensures that at least one digit follows the decimal point (if it exists).
+        $ = Anchors to the end of the string.
+        */
+        String timestruct = "^([1-9]|1[0-2]):([0-5][0-9])\\s?[APap][Mm]$";
+        /*
+        ^ = Anchors the regex to the start of the string.
+        ([1-9]|1[0-2]) = Matches the hour part:
+        [1-9] = Matches single-digit hours (1-9).
+        1[0-2] = Matches two-digit hours (10-12).
+        : = Matches the colon separating the hour and minutes.
+        ([0-5][0-9]) = Matches the minutes part, ensuring it's between 00 and 59.
+        [0-5] = The first digit (0-5).
+        [0-9] = The second digit (0-9).
+        \s? = Optionally matches a space between the minutes and the AM/PM part.
+        [APap][Mm] = Matches "AM" or "PM", case-insensitive.
+        [APap] = Matches either 'A' or 'P', case-insensitive.
+        [Mm] = Matches 'M', case-insensitive.
+        $ = Anchors to the end of the string.
+        */
+        if (amount.matches(amountstruct) && time.matches(timestruct) && !name.isEmpty() && !time.isEmpty()) {
+            ConfirmButton.setEnabled(true);
+        } else {
+            ConfirmButton.setEnabled(false);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -628,8 +677,7 @@ public class MainFrame extends javax.swing.JFrame {
                 ItemPanel.setVisible(false);
                 HomeListContainer.setWheelScrollingEnabled(true);
             }
-        }
-        else {
+        } else {
             SwitchtoHome();
         }
     }//GEN-LAST:event_ExpenseButtonActionPerformed
@@ -651,12 +699,12 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void ConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmButtonActionPerformed
         String name = NameField.getText();
-        String time = TimeField.getText();
+        String time = TimeField.getText().toUpperCase();
         double amount = Double.parseDouble(AmountField.getText());
         boolean type = currenttype;
-        
+
         current.add(new Record(name, time, amount, type));
-        
+
         NameField.setText("");
         TimeField.setText("");
         AmountField.setText("");
