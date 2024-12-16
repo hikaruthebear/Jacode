@@ -72,7 +72,17 @@ public class MainFrame extends javax.swing.JFrame {
         ItemPanel.setVisible(false);
     }
 
-    public void SetTopPanelInfo(double balance, double spent) { //may date pa to and SHIT!!!!!!!!!
+    public void SetTopPanelInfo(ArrayList<Record> records) { //may date pa to and SHIT!!!!!!!!!
+        double balance = 0;
+        double spent = 0;
+        for (Record record : records) {
+            if (record.isIncome) {
+                balance += record.amount;
+            }
+            else {
+                spent += record.amount;
+            }
+        }
         if (balance - spent < 0) {
             BalanceQuantity.setText(String.format("₱%.2f !!", balance - spent));
             BalanceBar.setValue(0);
@@ -651,6 +661,7 @@ public class MainFrame extends javax.swing.JFrame {
         TimeField.setText("");
         AmountField.setText("");
         ParseList(current);
+        SetTopPanelInfo(current);
         SwitchtoHome();
     }//GEN-LAST:event_ConfirmButtonActionPerformed
 

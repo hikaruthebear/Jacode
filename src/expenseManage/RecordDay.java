@@ -19,8 +19,7 @@ public class RecordDay extends javax.swing.JPanel {
     String day;
     ArrayList<Record> records = new ArrayList<>();
     
-    double balance = 0;
-    double spent = 0;
+    double amount = 0;
     
     public RecordDay(MainFrame mainframe, String date, String day, ArrayList<Record> records) {
         this.mainframe = mainframe;
@@ -36,28 +35,26 @@ public class RecordDay extends javax.swing.JPanel {
         
         for (Record record : records) {
             if (record.isIncome) {
-                balance += record.amount;
+                amount += record.amount;
             }
             else {
-                spent += record.amount;
+                amount -= record.amount;
             }
         }
         
-        double totalamount = balance - spent;
-        
         initComponents();
         
-        if (totalamount < 0) {
+        if (amount < 0) {
             ListItemPanel.setBackground(negativepanel);
             DateLabel.setForeground(negativedatecolor);
             TotalQuantity.setForeground(negativequantitycolor);
-            TotalQuantity.setText(String.format("%.2f ₱", totalamount));
+            TotalQuantity.setText(String.format("%.2f ₱", amount));
         }
         else {
             ListItemPanel.setBackground(positivepanel);
             DateLabel.setForeground(positivedatecolor);
             TotalQuantity.setForeground(positivequantitycolor);
-            TotalQuantity.setText(String.format("%.2f ₱", totalamount));
+            TotalQuantity.setText(String.format("%.2f ₱", amount));
         }
         
         DayLabel.setText(day);
@@ -125,7 +122,7 @@ public class RecordDay extends javax.swing.JPanel {
 
     private void RedirectDayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RedirectDayButtonActionPerformed
         mainframe.SwitchtoHome();
-        mainframe.SetTopPanelInfo(balance, spent);
+        mainframe.SetTopPanelInfo(records);
         mainframe.ParseList(records);
     }//GEN-LAST:event_RedirectDayButtonActionPerformed
 
