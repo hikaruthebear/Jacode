@@ -4,7 +4,11 @@
  */
 package expenseManage;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 /**
  *
@@ -12,11 +16,11 @@ import java.util.ArrayList;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    
     public MainFrame() {
-        initComponents();
         
-        SwitchtoHome();        
+        initComponents();
+
+        SwitchtoHome();
         //pwede tanggalin to tinest ko lang
         //String name, String time, double amount, boolean isIncome (if income yes, if expense false)
         ArrayList<Record> record1 = new ArrayList<>();
@@ -25,57 +29,114 @@ public class MainFrame extends javax.swing.JFrame {
         record1.add(new Record("Gym Membership Payment", "7:45 PM", 25.00, false));
         record1.add(new Record("Gift Received", "3:15 PM", 100.00, true));
         record1.add(new Record("Utility Bill Payment", "5:30 PM", 78.90, false));
-        RecordDay test = new RecordDay (this, "January 01, 2024", "Tuesday", record1);
+        RecordDay test = new RecordDay(this, "January 01, 2024", "Tuesday", record1);
         ArrayList<Record> record2 = new ArrayList<>();
         record2.add(new Record("Grocery Shopping", "11:24 AM", 45.67, false));
         record2.add(new Record("Salary Deposit", "9:00 AM", 50.00, true));
         record2.add(new Record("Gym Membership Payment", "7:45 PM", 25.00, false));
         record2.add(new Record("Gift Received", "3:15 PM", 50.00, true));
         record2.add(new Record("Utility Bill Payment", "5:30 PM", 78.90, false));
-        RecordDay test1 = new RecordDay (this, "January 01, 2024", "Tuesday", record2);
+        RecordDay test1 = new RecordDay(this, "January 01, 2024", "Tuesday", record2);
         DayList.add(test);
         DayList.add(test1);
 
-       //<--->
+        //<--->
     }
-    
+
     public void SwitchtoHome() {
+        Icon plus = new ImageIcon("src/resources/add 1.png");
+        
         HomeMainPanel.setVisible(true);
         ListMainPanel.setVisible(false);
         HomeButton.setSelected(true);
         ListButton.setSelected(false);
         ExpenseButton.setSelected(false);
+        PopUpPanel.setVisible(false);
+        ExpenseButton.setIcon(plus);
+        ItemPanel.setVisible(false);
     }
-    
+
     public void SwitchtoList() {
+        Icon backarrow = new ImageIcon("src/resources/left-arrow 1.png");
         HomeMainPanel.setVisible(false);
         ListMainPanel.setVisible(true);
         HomeButton.setSelected(false);
         ListButton.setSelected(true);
         ExpenseButton.setSelected(false);
+        PopUpPanel.setVisible(false);
+        ExpenseButton.setIcon(backarrow);
+        ItemPanel.setVisible(false);
     }
-    
+
     public void SetTopPanelInfo(double balance, double spent) { //may date pa to and SHIT!!!!!!!!!
         if (balance - spent <= 0) {
             BalanceQuantity.setText(String.format("₱%.2f !!", balance - spent));
             BalanceBar.setValue(0);
             BalanceBarPercentage.setText("0%");
             BalanceBarSpent.setText(String.format("₱%.2f", spent));
-        }
-        else {
+        } else {
             BalanceQuantity.setText(String.format("₱%.2f", balance - spent));
-            int tempvalue = (int)(((double)(balance - spent) / balance) * 100);
+            int tempvalue = (int) (((double) (balance - spent) / balance) * 100);
             BalanceBar.setValue(tempvalue);
             BalanceBarPercentage.setText(String.format("%d%%", tempvalue));
             BalanceBarSpent.setText(String.format("₱%.2f", spent));
         }
     }
-    
-    public void ParseList (ArrayList<Record> records) {
+
+    public void ParseList(ArrayList<Record> records) {
         for (Record record : records) {
             HomeList.add(record);
         }
     }
+    
+    public void ItemChecks () {
+        NameField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // Hide the label when the field gains focus
+                NameLabel.setVisible(false);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Show the label if the field is empty when focus is lost
+                if (NameField.getText().trim().isEmpty()) {
+                    NameLabel.setVisible(true);
+                }
+            }
+        });
+        TimeField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // Hide the label when the field gains focus
+                TimeLabel.setVisible(false);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Show the label if the field is empty when focus is lost
+                if (TimeField.getText().trim().isEmpty()) {
+                    TimeLabel.setVisible(true);
+                }
+            }
+        });
+        AmountField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // Hide the label when the field gains focus
+                AmountLabel.setVisible(false);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Show the label if the field is empty when focus is lost
+                if (AmountField.getText().trim().isEmpty()) {
+                    AmountLabel.setVisible(true);
+                }
+            }
+        });
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,6 +147,16 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         BarButtons = new javax.swing.ButtonGroup();
+        ItemPanel = new javax.swing.JPanel();
+        NameLabel = new javax.swing.JLabel();
+        TimeLabel = new javax.swing.JLabel();
+        AmountLabel = new javax.swing.JLabel();
+        NameField = new javax.swing.JTextField();
+        TimeField = new javax.swing.JTextField();
+        AmountField = new javax.swing.JTextField();
+        PopUpPanel = new javax.swing.JPanel();
+        AddIncomeButton = new javax.swing.JButton();
+        AddExpenseButton = new javax.swing.JButton();
         BarPanel = new javax.swing.JPanel();
         ExpenseButton = new javax.swing.JToggleButton();
         ExpenseButtonLabel = new javax.swing.JLabel();
@@ -119,6 +190,85 @@ public class MainFrame extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        ItemPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        NameLabel.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
+        NameLabel.setText("Name of Expense");
+        ItemPanel.add(NameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 410, 30));
+
+        TimeLabel.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
+        TimeLabel.setText("Time");
+        ItemPanel.add(TimeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 120, 50));
+
+        AmountLabel.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
+        AmountLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        AmountLabel.setText("Amount");
+        ItemPanel.add(AmountLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, 130, 50));
+
+        NameField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        NameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NameFieldActionPerformed(evt);
+            }
+        });
+        ItemPanel.add(NameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 30, 420, 50));
+
+        TimeField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        ItemPanel.add(TimeField, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 98, 140, 50));
+
+        AmountField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        AmountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        ItemPanel.add(AmountField, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, 140, 50));
+
+        getContentPane().add(ItemPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 450, 180));
+
+        PopUpPanel.setMaximumSize(new java.awt.Dimension(100, 100));
+        PopUpPanel.setMinimumSize(new java.awt.Dimension(100, 100));
+        PopUpPanel.setOpaque(false);
+
+        AddIncomeButton.setBackground(new java.awt.Color(106, 217, 106));
+        AddIncomeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image.png"))); // NOI18N
+        AddIncomeButton.setBorderPainted(false);
+        AddIncomeButton.setFocusable(false);
+        AddIncomeButton.setOpaque(true);
+        AddIncomeButton.setRolloverEnabled(false);
+        AddIncomeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddIncomeButtonActionPerformed(evt);
+            }
+        });
+
+        AddExpenseButton.setBackground(new java.awt.Color(248, 149, 149));
+        AddExpenseButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image 1.png"))); // NOI18N
+        AddExpenseButton.setBorderPainted(false);
+        AddExpenseButton.setFocusable(false);
+        AddExpenseButton.setOpaque(true);
+        AddExpenseButton.setRolloverEnabled(false);
+        AddExpenseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddExpenseButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout PopUpPanelLayout = new javax.swing.GroupLayout(PopUpPanel);
+        PopUpPanel.setLayout(PopUpPanelLayout);
+        PopUpPanelLayout.setHorizontalGroup(
+            PopUpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(AddExpenseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PopUpPanelLayout.createSequentialGroup()
+                .addGap(0, 50, Short.MAX_VALUE)
+                .addComponent(AddIncomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        PopUpPanelLayout.setVerticalGroup(
+            PopUpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PopUpPanelLayout.createSequentialGroup()
+                .addComponent(AddIncomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(AddExpenseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(PopUpPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 650, 100, 100));
+
         BarPanel.setBackground(new java.awt.Color(255, 255, 255));
         BarPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -126,6 +276,11 @@ public class MainFrame extends javax.swing.JFrame {
         ExpenseButton.setBorderPainted(false);
         ExpenseButton.setContentAreaFilled(false);
         ExpenseButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/arrow-down-sign-to-navigate.png"))); // NOI18N
+        ExpenseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExpenseButtonActionPerformed(evt);
+            }
+        });
         BarPanel.add(ExpenseButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, 170, 70));
 
         ExpenseButtonLabel.setBackground(new java.awt.Color(255, 255, 255));
@@ -301,7 +456,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ListSeperator, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(BottomPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(HomeListContainer)
@@ -368,6 +523,42 @@ public class MainFrame extends javax.swing.JFrame {
         SwitchtoList();
     }//GEN-LAST:event_ListButtonActionPerformed
 
+    private void AddIncomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddIncomeButtonActionPerformed
+        NameLabel.setText("Name of Income");
+        Color income = new Color(131, 255, 158);
+        ItemPanel.setBackground(income);
+        ItemPanel.setVisible(true);
+        PopUpPanel.setVisible(false);
+        ItemChecks();
+    }//GEN-LAST:event_AddIncomeButtonActionPerformed
+
+    private void ExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExpenseButtonActionPerformed
+        if (HomeMainPanel.isShowing()) {
+            if (ExpenseButton.isSelected()) {
+                PopUpPanel.setVisible(true);
+            } else {
+                PopUpPanel.setVisible(false);
+                ItemPanel.setVisible(false);
+            }
+        }
+        else {
+            SwitchtoHome();
+        }
+    }//GEN-LAST:event_ExpenseButtonActionPerformed
+
+    private void AddExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddExpenseButtonActionPerformed
+        NameLabel.setText("Name of Expense");
+        Color expense = new Color(255, 131, 131);
+        ItemPanel.setBackground(expense);
+        ItemPanel.setVisible(true);
+        PopUpPanel.setVisible(false);
+        ItemChecks();
+    }//GEN-LAST:event_AddExpenseButtonActionPerformed
+
+    private void NameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameFieldActionPerformed
+
+    }//GEN-LAST:event_NameFieldActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -377,7 +568,7 @@ public class MainFrame extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        
+
         //</editor-fold>
         com.formdev.flatlaf.FlatLightLaf.setup();
 
@@ -390,6 +581,10 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddExpenseButton;
+    private javax.swing.JButton AddIncomeButton;
+    private javax.swing.JTextField AmountField;
+    private javax.swing.JLabel AmountLabel;
     private javax.swing.JProgressBar BalanceBar;
     private javax.swing.JLabel BalanceBarPercentage;
     private javax.swing.JLabel BalanceBarSpent;
@@ -409,6 +604,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel HomeList;
     private javax.swing.JScrollPane HomeListContainer;
     private javax.swing.JPanel HomeMainPanel;
+    private javax.swing.JPanel ItemPanel;
     private javax.swing.JToggleButton ListButton;
     private javax.swing.JScrollPane ListDayContainer;
     private javax.swing.JLabel ListLabel;
@@ -416,6 +612,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel ListMainPanel;
     private javax.swing.JSeparator ListSeperator;
     private javax.swing.JTextField MonthName;
+    private javax.swing.JTextField NameField;
+    private javax.swing.JLabel NameLabel;
+    private javax.swing.JPanel PopUpPanel;
+    private javax.swing.JTextField TimeField;
+    private javax.swing.JLabel TimeLabel;
     private javax.swing.JPanel TopPanel;
     private javax.swing.JLabel UserLabel;
     // End of variables declaration//GEN-END:variables
