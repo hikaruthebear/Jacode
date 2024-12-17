@@ -6,7 +6,8 @@ package expenseManage;
 
 import java.awt.Color;
 import java.util.ArrayList;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -16,6 +17,7 @@ public class RecordDay extends javax.swing.JPanel {
     
     MainFrame mainframe;
     String date;
+    LocalDate dateobj = null;
     String day;
     ArrayList<Record> records = new ArrayList<>();
     
@@ -24,6 +26,8 @@ public class RecordDay extends javax.swing.JPanel {
     public RecordDay(MainFrame mainframe, String date, String day, ArrayList<Record> records) {
         this.mainframe = mainframe;
         this.date = date;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+        dateobj = LocalDate.parse(date, formatter);
         this.day = day;
         this.records = records;
         Color positivedatecolor = new Color (89, 111, 75);
@@ -48,13 +52,13 @@ public class RecordDay extends javax.swing.JPanel {
             ListItemPanel.setBackground(negativepanel);
             DateLabel.setForeground(negativedatecolor);
             TotalQuantity.setForeground(negativequantitycolor);
-            TotalQuantity.setText(String.format("%.2f ₱", amount));
+            TotalQuantity.setText(String.format("%.2f P", amount));
         }
         else {
             ListItemPanel.setBackground(positivepanel);
             DateLabel.setForeground(positivedatecolor);
             TotalQuantity.setForeground(positivequantitycolor);
-            TotalQuantity.setText(String.format("%.2f ₱", amount));
+            TotalQuantity.setText(String.format("%.2f P", amount));
         }
         
         DayLabel.setText(day);
@@ -122,7 +126,7 @@ public class RecordDay extends javax.swing.JPanel {
 
     private void RedirectDayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RedirectDayButtonActionPerformed
         mainframe.SwitchtoHome();
-        mainframe.SetTopPanelInfo(records);
+        mainframe.SetTopPanelInfo(records, day, dateobj);
         mainframe.ParseList(records);
     }//GEN-LAST:event_RedirectDayButtonActionPerformed
 

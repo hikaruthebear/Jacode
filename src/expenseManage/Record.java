@@ -38,14 +38,14 @@ public class Record extends javax.swing.JPanel {
             TypeIcon.setIcon(income);
             ItemTime.setForeground(incometimecolor);
             ItemQuantity.setForeground(incomequantitycolor);
-            ItemQuantity.setText(String.format("+%.2f ₱", amount));
+            ItemQuantity.setText(String.format("+%.2f P", amount));
         }
         else {
             ListItemPanel.setBackground(expensepanel);
             TypeIcon.setIcon(expense);
             ItemTime.setForeground(expensetimecolor);
             ItemQuantity.setForeground(expensequantitycolor);
-            ItemQuantity.setText(String.format("-%.2f ₱", amount));
+            ItemQuantity.setText(String.format("-%.2f P", amount));
         }
         
         ItemName.setText(name);

@@ -24,6 +24,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     ArrayList<Record> current = new ArrayList<>();
     boolean currenttype;
+    String currentday;
+    LocalDate currentdate = null;
 
     public MainFrame() {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
@@ -33,8 +35,12 @@ public class MainFrame extends javax.swing.JFrame {
 
         if (file.exists()) {
             current = readrecord(path);
+            currentdate = LocalDate.parse(currentDate, dateFormat);
+            currentday = currentdate.getDayOfWeek().toString().substring(0, 1) + currentdate.getDayOfWeek().toString().substring(1).toLowerCase();
         } else {
             createDailyFile(current);
+            currentdate = LocalDate.parse(currentDate, dateFormat);
+            currentday = currentdate.getDayOfWeek().toString().substring(0, 1) + currentdate.getDayOfWeek().toString().substring(1).toLowerCase();
         }
 
         initComponents();
@@ -57,7 +63,7 @@ public class MainFrame extends javax.swing.JFrame {
         ExpenseButton.setIcon(plus);
         ItemPanel.setVisible(false);
         HomeListContainer.setWheelScrollingEnabled(true);
-        SetTopPanelInfo(current);
+        SetTopPanelInfo(current, currentday, currentdate);
         ParseList(current);
     }
 
@@ -75,7 +81,7 @@ public class MainFrame extends javax.swing.JFrame {
         ItemPanel.setVisible(false);
     }
 
-    public void SetTopPanelInfo(ArrayList<Record> records) { //may date pa to and SHIT!!!!!!!!!
+    public void SetTopPanelInfo(ArrayList<Record> records, String day, LocalDate date) {
         double balance = 0;
         double spent = 0;
         for (Record record : records) {
@@ -86,17 +92,26 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
         if (balance - spent < 0) {
-            BalanceQuantity.setText(String.format("₱%.2f !!", balance - spent));
+            BalanceQuantity.setText(String.format("P%.2f !!", balance - spent));
             BalanceBar.setValue(0);
             BalanceBarPercentage.setText("0%");
-            BalanceBarSpent.setText(String.format("₱%.2f", spent));
+            BalanceBarSpent.setText(String.format("P%.2f", spent));
         } else {
-            BalanceQuantity.setText(String.format("₱%.2f", balance - spent));
-            int tempvalue = (int) (((double) (balance - spent) / balance) * 100);
+            BalanceQuantity.setText(String.format("P%.2f", balance - spent));
+            int tempvalue = (int) (((double) (balance - spent)   / balance) * 100);
             BalanceBar.setValue(tempvalue);
             BalanceBarPercentage.setText(String.format("%d%%", tempvalue));
-            BalanceBarSpent.setText(String.format("₱%.2f", spent));
+            BalanceBarSpent.setText(String.format("P%.2f", spent));
         }
+        DayLabel.setText(day);
+        String month = date.getMonth().toString();
+        month = month.substring(0, 1) + month.substring(1).toLowerCase();
+        String daynumber = String.valueOf(date.getDayOfMonth());
+        DayNumberLabel.setText(daynumber);
+        MonthLabel.setText(month);
+        
+        currentdate = date;
+        currentday = daynumber; //redundacy
     }
 
     public void ParseList(ArrayList<Record> records) {
@@ -341,8 +356,8 @@ public class MainFrame extends javax.swing.JFrame {
                             String directory = "Record/" + filename + ".txt";
 
                             LocalDate date = LocalDate.parse(filename, formatter);
-                            String day = date.getDayOfWeek().toString().substring(0, 1) + date.getDayOfWeek().toString().substring(1).toLowerCase();
-                            folderlist.add(new RecordDay(this, date.format(formatter2), day, readrecord(directory)));
+                            String specialday = date.getDayOfWeek().toString().substring(0, 1) + date.getDayOfWeek().toString().substring(1).toLowerCase();
+                            folderlist.add(new RecordDay(this, date.format(formatter2), specialday, readrecord(directory)));
 
                         } catch (Exception ex) {
                             System.err.println("Error processing file " + filename + ": " + ex.getMessage());
@@ -395,9 +410,10 @@ public class MainFrame extends javax.swing.JFrame {
         BalanceBar = new javax.swing.JProgressBar();
         BalanceBarPercentage = new javax.swing.JLabel();
         CalendarPanel = new javax.swing.JPanel();
-        DateNumber = new javax.swing.JTextField();
-        DayName = new javax.swing.JTextField();
-        MonthName = new javax.swing.JTextField();
+        MonthLabel = new javax.swing.JLabel();
+        DayNumberLabel = new javax.swing.JLabel();
+        DayLabel = new javax.swing.JLabel();
+        CalendarLabel = new javax.swing.JLabel();
         BalanceBarSpent = new javax.swing.JLabel();
         BottomPanel = new javax.swing.JPanel();
         ListLabel = new javax.swing.JLabel();
@@ -611,59 +627,30 @@ public class MainFrame extends javax.swing.JFrame {
         CalendarPanel.setBackground(new java.awt.Color(226, 255, 223));
         CalendarPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        DateNumber.setEditable(false);
-        DateNumber.setBackground(new java.awt.Color(174, 253, 163));
-        DateNumber.setFont(new java.awt.Font("Albert Sans", 1, 48)); // NOI18N
-        DateNumber.setForeground(new java.awt.Color(28, 108, 30));
-        DateNumber.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        DateNumber.setText("01");
-        DateNumber.setFocusable(false);
-        DateNumber.setMaximumSize(new java.awt.Dimension(104, 79));
-        DateNumber.setMinimumSize(new java.awt.Dimension(104, 79));
-        DateNumber.setPreferredSize(new java.awt.Dimension(104, 79));
-        DateNumber.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DateNumberActionPerformed(evt);
-            }
-        });
-        CalendarPanel.add(DateNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 100, 60));
+        MonthLabel.setFont(new java.awt.Font("Afacad Medium", 0, 24)); // NOI18N
+        MonthLabel.setForeground(new java.awt.Color(255, 255, 255));
+        MonthLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        MonthLabel.setText("January");
+        CalendarPanel.add(MonthLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 120, 30));
 
-        DayName.setEditable(false);
-        DayName.setBackground(new java.awt.Color(0, 102, 0));
-        DayName.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
-        DayName.setForeground(new java.awt.Color(255, 255, 255));
-        DayName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        DayName.setText("Tuesday");
-        DayName.setFocusable(false);
-        DayName.setMinimumSize(new java.awt.Dimension(104, 37));
-        DayName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DayNameActionPerformed(evt);
-            }
-        });
-        CalendarPanel.add(DayName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 100, 30));
+        DayNumberLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 100)); // NOI18N
+        DayNumberLabel.setForeground(new java.awt.Color(28, 108, 30));
+        DayNumberLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        DayNumberLabel.setText("01");
+        CalendarPanel.add(DayNumberLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 30, 140, 80));
 
-        MonthName.setEditable(false);
-        MonthName.setBackground(new java.awt.Color(87, 184, 91));
-        MonthName.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
-        MonthName.setForeground(new java.awt.Color(255, 255, 255));
-        MonthName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        MonthName.setText("January");
-        MonthName.setFocusable(false);
-        MonthName.setMaximumSize(new java.awt.Dimension(104, 37));
-        MonthName.setMinimumSize(new java.awt.Dimension(104, 37));
-        MonthName.setPreferredSize(new java.awt.Dimension(104, 37));
-        MonthName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MonthNameActionPerformed(evt);
-            }
-        });
-        CalendarPanel.add(MonthName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 30));
+        DayLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        DayLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        DayLabel.setText("Tuesday");
+        CalendarPanel.add(DayLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 145, 20));
 
-        TopPanel.add(CalendarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(336, 28, 101, -1));
+        CalendarLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Calendar (1).png"))); // NOI18N
+        CalendarPanel.add(CalendarLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 140));
+
+        TopPanel.add(CalendarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, -1, 140));
 
         BalanceBarSpent.setFont(new java.awt.Font("Albert Sans", 0, 18)); // NOI18N
-        BalanceBarSpent.setForeground(new java.awt.Color(51, 51, 51));
+        BalanceBarSpent.setForeground(new java.awt.Color(28, 103, 30));
         BalanceBarSpent.setText("P749.99");
         TopPanel.add(BalanceBarSpent, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, -1, -1));
 
@@ -738,19 +725,6 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void DateNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DateNumberActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DateNumberActionPerformed
-
-    private void MonthNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MonthNameActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_MonthNameActionPerformed
-
-    private void DayNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DayNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DayNameActionPerformed
-
     private void HomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeButtonActionPerformed
         SwitchtoHome();
     }//GEN-LAST:event_HomeButtonActionPerformed
@@ -814,14 +788,15 @@ public class MainFrame extends javax.swing.JFrame {
         double amount = Double.parseDouble(AmountField.getText());
         boolean type = currenttype;
 
-        current.add(new Record(name, time, amount, type));
+        current.addFirst(new Record(name, time, amount, type));
+        
         createDailyFile(current);
 
         NameField.setText("");
         TimeField.setText("");
         AmountField.setText("");
         ParseList(current);
-        SetTopPanelInfo(current);
+        SetTopPanelInfo(current, currentday, currentdate);
         SwitchtoHome();
     }//GEN-LAST:event_ConfirmButtonActionPerformed
 
@@ -860,11 +835,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.ButtonGroup BarButtons;
     private javax.swing.JPanel BarPanel;
     private javax.swing.JPanel BottomPanel;
+    private javax.swing.JLabel CalendarLabel;
     private javax.swing.JPanel CalendarPanel;
     private javax.swing.JButton ConfirmButton;
-    private javax.swing.JTextField DateNumber;
+    private javax.swing.JLabel DayLabel;
     private javax.swing.JPanel DayList;
-    private javax.swing.JTextField DayName;
+    private javax.swing.JLabel DayNumberLabel;
     private javax.swing.JToggleButton ExpenseButton;
     private javax.swing.JLabel ExpenseButtonLabel;
     private javax.swing.JToggleButton HomeButton;
@@ -878,7 +854,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel ListLabel1;
     private javax.swing.JPanel ListMainPanel;
     private javax.swing.JSeparator ListSeperator;
-    private javax.swing.JTextField MonthName;
+    private javax.swing.JLabel MonthLabel;
     private javax.swing.JTextField NameField;
     private javax.swing.JLabel NameLabel;
     private javax.swing.JPanel PopUpPanel;
