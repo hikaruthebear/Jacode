@@ -49,9 +49,9 @@ public class MainFrame extends javax.swing.JFrame {
         DayList.add(test);
         DayList.add(test1);
         */
-        writeFile(filePath, current);
         
-    }
+        
+    } 
 
     public void SwitchtoHome() {
         Icon plus = new ImageIcon("src/resources/add 1.png");
@@ -692,6 +692,7 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             SwitchtoHome();
         }
+        
     }//GEN-LAST:event_ExpenseButtonActionPerformed
 
     private void AddExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddExpenseButtonActionPerformed
@@ -721,7 +722,7 @@ public class MainFrame extends javax.swing.JFrame {
             type = "Expense";
         }
 
-        current.add(new Record(time, type, amount, type));
+        current.add(new Record(time, type, amount, name));
 
         NameField.setText("");
         TimeField.setText("");
@@ -729,6 +730,8 @@ public class MainFrame extends javax.swing.JFrame {
         ParseList(current);
         SetTopPanelInfo(current);
         SwitchtoHome();
+        
+        writeFile(filePath, current);
     }//GEN-LAST:event_ConfirmButtonActionPerformed
 
     /**
@@ -750,6 +753,8 @@ public class MainFrame extends javax.swing.JFrame {
                 new MainFrame().setVisible(true);
             }
         });
+        
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
