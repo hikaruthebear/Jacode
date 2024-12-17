@@ -26,8 +26,10 @@ public class MainFrame extends javax.swing.JFrame {
     boolean currenttype;
     String currentday;
     LocalDate currentdate = null;
+    String user;
 
     public MainFrame() {
+        user = "User";
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
         String currentDate = LocalDateTime.now().format(dateFormat); // e.g., 06-12-24
         String path = "Record/" + currentDate + ".txt";
@@ -44,7 +46,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         initComponents();
-
+        HomeMainPanel.getRootPane().requestFocusInWindow();
         SwitchtoHome();
         //pwede tanggalin to tinest ko lang
         //String name, String time, double amount, boolean isIncome (if income yes, if expense false)
@@ -53,7 +55,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     public final void SwitchtoHome() {
         Icon plus = new ImageIcon("src/resources/add 1.png");
-
+        
+        NameRead();
         HomeMainPanel.setVisible(true);
         ListMainPanel.setVisible(false);
         HomeButton.setSelected(true);
@@ -64,8 +67,6 @@ public class MainFrame extends javax.swing.JFrame {
         ItemPanel.setVisible(false);
         HomeListContainer.setWheelScrollingEnabled(true);
         SetTopPanelInfo(current, currentday, currentdate);
-        DayList.removeAll();
-        CheckFolder();
         ParseList(current);
     }
 
@@ -81,6 +82,7 @@ public class MainFrame extends javax.swing.JFrame {
         PopUpPanel.setVisible(false);
         ExpenseButton.setIcon(backarrow);
         ItemPanel.setVisible(false);
+        NameSave();
     }
 
     public void SetTopPanelInfo(ArrayList<Record> records, String day, LocalDate date) {
@@ -100,7 +102,7 @@ public class MainFrame extends javax.swing.JFrame {
             BalanceBarSpent.setText(String.format("P%.2f", spent));
         } else {
             BalanceQuantity.setText(String.format("P%.2f", balance - spent));
-            int tempvalue = (int) (((double) (balance - spent)   / balance) * 100);
+            int tempvalue = (int) (((double) (balance - spent) / balance) * 100);
             BalanceBar.setValue(tempvalue);
             BalanceBarPercentage.setText(String.format("%d%%", tempvalue));
             BalanceBarSpent.setText(String.format("P%.2f", spent));
@@ -111,7 +113,7 @@ public class MainFrame extends javax.swing.JFrame {
         String daynumber = String.valueOf(date.getDayOfMonth());
         DayNumberLabel.setText(daynumber);
         MonthLabel.setText(month);
-        
+
         currentdate = date;
         currentday = day; //redundacy
     }
@@ -298,6 +300,31 @@ public class MainFrame extends javax.swing.JFrame {
             System.err.println("An error occurred while saving the file: " + e.getMessage());
         }
     }
+    
+    public void saveCurrentFile(ArrayList<Record> records) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
+        String savedate = currentdate.format(dateFormat);
+        String fileName = savedate + ".txt";
+        String relativeDirectory = "Record";
+
+        File dir = new File(relativeDirectory);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        File file = new File(dir, fileName);
+
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write("(item:" + records.size() + ")\n");
+            writer.write("name, time, amount, isIncome\n");
+            for (Record record : records) {
+                writer.write(String.format("%s, %s, %f, %b\n", record.name, record.time, record.amount, record.isIncome));
+            }
+            System.out.println("File saved: " + file.getName());
+        } catch (IOException e) {
+            System.err.println("An error occurred while saving the file: " + e.getMessage());
+        }
+    }
 
     private ArrayList<Record> readrecord(String filePath) {
         ArrayList<Record> records = new ArrayList<>();
@@ -355,9 +382,13 @@ public class MainFrame extends javax.swing.JFrame {
                         try {
                             String directory = "Record/" + filename + ".txt";
 
-                            LocalDate date = LocalDate.parse(filename, formatter);
-                            String specialday = date.getDayOfWeek().toString().substring(0, 1) + date.getDayOfWeek().toString().substring(1).toLowerCase();
-                            folderlist.add(new RecordDay(this, date.format(formatter2), specialday, readrecord(directory)));
+                            if (filename.matches("\\d{2}-\\d{2}-\\d{2}")) {
+                                LocalDate date = LocalDate.parse(filename, formatter);
+                                String specialday = date.getDayOfWeek().toString().substring(0, 1) + date.getDayOfWeek().toString().substring(1).toLowerCase();
+                                folderlist.add(new RecordDay(this, date.format(formatter2), specialday, readrecord(directory)));
+                            } else {
+                                System.err.println("Invalid date format: " + filename);
+                            }
 
                         } catch (Exception ex) {
                             System.err.println("Error processing file " + filename + ": " + ex.getMessage());
@@ -369,9 +400,36 @@ public class MainFrame extends javax.swing.JFrame {
         Collections.sort(folderlist, Comparator.comparing(RecordDay
                 -> LocalDate.parse(RecordDay.date, formatter2), Comparator.reverseOrder()
         ));
-        
+
         for (RecordDay day : folderlist) {
             DayList.add(day);
+        }
+    }
+
+    private void NameSave() {
+        String fileuser = UserField.getText(); //
+        Path filePath = Paths.get("Record/user.txt");
+
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+            writer.write(fileuser);
+            System.out.println("Text written to file: " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    private void NameRead() {
+        Path filePath = Paths.get("Record/user.txt");
+
+        if (!Files.exists(filePath)) {
+            System.err.println("File does not exist: " + filePath);
+        }
+
+        try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+            String content = reader.readLine();
+            user = content;
+        } catch (IOException e) {
+            System.err.println("Error reading from file: " + e.getMessage());
         }
     }
 
@@ -403,7 +461,8 @@ public class MainFrame extends javax.swing.JFrame {
         ListButton = new javax.swing.JToggleButton();
         HomeMainPanel = new javax.swing.JPanel();
         TopPanel = new javax.swing.JPanel();
-        UserLabel = new javax.swing.JLabel();
+        UserField = new javax.swing.JTextField();
+        HiLabel = new javax.swing.JLabel();
         BalanceLabel = new javax.swing.JLabel();
         BalanceQuantity = new javax.swing.JLabel();
         BalancePanel = new javax.swing.JPanel();
@@ -575,10 +634,16 @@ public class MainFrame extends javax.swing.JFrame {
         TopPanel.setBackground(new java.awt.Color(226, 255, 223));
         TopPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        UserLabel.setFont(new java.awt.Font("Albert Sans", 1, 24)); // NOI18N
-        UserLabel.setForeground(new java.awt.Color(51, 51, 51));
-        UserLabel.setText("Hi, User1234");
-        TopPanel.add(UserLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 34, -1, -1));
+        UserField.setBackground(new java.awt.Color(226, 255, 223));
+        UserField.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        UserField.setText("User");
+        UserField.setBorder(null);
+        TopPanel.add(UserField, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 34, 190, 32));
+
+        HiLabel.setFont(new java.awt.Font("Albert Sans", 1, 24)); // NOI18N
+        HiLabel.setForeground(new java.awt.Color(51, 51, 51));
+        HiLabel.setText("Hi,");
+        TopPanel.add(HiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 34, -1, -1));
 
         BalanceLabel.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
         BalanceLabel.setForeground(new java.awt.Color(51, 51, 51));
@@ -789,16 +854,13 @@ public class MainFrame extends javax.swing.JFrame {
         boolean type = currenttype;
 
         current.addFirst(new Record(name, time, amount, type));
-
+        saveCurrentFile(current);
+        
         NameField.setText("");
         TimeField.setText("");
         AmountField.setText("");
-        ParseList(current);
         SetTopPanelInfo(current, currentday, currentdate);
         SwitchtoHome();
-        createDailyFile(current);
-        DayList.removeAll();
-        CheckFolder();
     }//GEN-LAST:event_ConfirmButtonActionPerformed
 
     /**
@@ -820,7 +882,6 @@ public class MainFrame extends javax.swing.JFrame {
                 new MainFrame().setVisible(true);
             }
         });
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -845,6 +906,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel DayNumberLabel;
     private javax.swing.JToggleButton ExpenseButton;
     private javax.swing.JLabel ExpenseButtonLabel;
+    private javax.swing.JLabel HiLabel;
     private javax.swing.JToggleButton HomeButton;
     private javax.swing.JPanel HomeList;
     private javax.swing.JScrollPane HomeListContainer;
@@ -863,6 +925,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField TimeField;
     private javax.swing.JLabel TimeLabel;
     private javax.swing.JPanel TopPanel;
-    private javax.swing.JLabel UserLabel;
+    private javax.swing.JTextField UserField;
     // End of variables declaration//GEN-END:variables
 }
