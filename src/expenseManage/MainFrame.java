@@ -5,12 +5,16 @@
 package expenseManage;
 
 import java.awt.Color;
-import java.util.ArrayList;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.io.*;
+import java.nio.file.*;
 
 /**
  *
@@ -22,33 +26,26 @@ public class MainFrame extends javax.swing.JFrame {
     boolean currenttype;
 
     public MainFrame() {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
+        String currentDate = LocalDateTime.now().format(dateFormat); // e.g., 06-12-24
+        String path = "Record/" + currentDate + ".txt";
+        File file = new File(path);
+
+        if (file.exists()) {
+            current = readrecord(path);
+        } else {
+            createDailyFile(current);
+        }
 
         initComponents();
 
         SwitchtoHome();
         //pwede tanggalin to tinest ko lang
         //String name, String time, double amount, boolean isIncome (if income yes, if expense false)
-        ArrayList<Record> record1 = new ArrayList<>();
-        record1.add(new Record("Grocery Shopping", "11:24 AM", 45.67, false));
-        record1.add(new Record("Salary Deposit", "9:00 AM", 1500.00, true));
-        record1.add(new Record("Gym Membership Payment", "7:45 PM", 25.00, false));
-        record1.add(new Record("Gift Received", "3:15 PM", 100.00, true));
-        record1.add(new Record("Utility Bill Payment", "5:30 PM", 78.90, false));
-        RecordDay test = new RecordDay(this, "January 01, 2024", "Tuesday", record1);
-        ArrayList<Record> record2 = new ArrayList<>();
-        record2.add(new Record("Grocery Shopping", "11:24 AM", 45.67, false));
-        record2.add(new Record("Salary Deposit", "9:00 AM", 50.00, true));
-        record2.add(new Record("Gym Membership Payment", "7:45 PM", 25.00, false));
-        record2.add(new Record("Gift Received", "3:15 PM", 50.00, true));
-        record2.add(new Record("Utility Bill Payment", "5:30 PM", 78.90, false));
-        RecordDay test1 = new RecordDay(this, "January 01, 2024", "Tuesday", record2);
-        DayList.add(test);
-        DayList.add(test1);
-
         //<--->
     }
 
-    public void SwitchtoHome() {
+    public final void SwitchtoHome() {
         Icon plus = new ImageIcon("src/resources/add 1.png");
 
         HomeMainPanel.setVisible(true);
@@ -61,9 +58,12 @@ public class MainFrame extends javax.swing.JFrame {
         ItemPanel.setVisible(false);
         HomeListContainer.setWheelScrollingEnabled(true);
         SetTopPanelInfo(current);
+        ParseList(current);
     }
 
     public void SwitchtoList() {
+        DayList.removeAll();
+        CheckFolder();
         Icon backarrow = new ImageIcon("src/resources/left-arrow 1.png");
         HomeMainPanel.setVisible(false);
         ListMainPanel.setVisible(true);
@@ -233,7 +233,7 @@ public class MainFrame extends javax.swing.JFrame {
         \\d+ = Matches one or more digits.
                The + quantifier ensures that at least one digit follows the decimal point (if it exists).
         $ = Anchors to the end of the string.
-        */
+         */
         String timestruct = "^([1-9]|1[0-2]):([0-5][0-9])\s[APap][Mm]$";
         /*
         ^ = Anchors the regex to the start of the string.
@@ -249,11 +249,114 @@ public class MainFrame extends javax.swing.JFrame {
         [APap] = Matches either 'A' or 'P', case-insensitive.
         [Mm] = Matches 'M', case-insensitive.
         $ = Anchors to the end of the string.
-        */
+         */
         if (amount.matches(amountstruct) && time.matches(timestruct) && !name.isEmpty() && !time.isEmpty()) {
             ConfirmButton.setEnabled(true);
         } else {
             ConfirmButton.setEnabled(false);
+        }
+    }
+
+    public static boolean createDailyFile(ArrayList<Record> records) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
+        String currentDate = LocalDateTime.now().format(dateFormat);
+        String fileName = currentDate + ".txt";
+        String relativeDirectory = "Record";
+
+        File dir = new File(relativeDirectory);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        File file = new File(dir, fileName);
+
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write("(item:" + records.size() + ")\n");
+            writer.write("name, time, amount, isIncome\n");
+            for (Record record : records) {
+                writer.write(String.format("%s, %s, %f, %b\n", record.name, record.time, record.amount, record.isIncome));
+            }
+            System.out.println("File saved: " + file.getName());
+            return true;
+        } catch (IOException e) {
+            System.err.println("An error occurred while saving the file: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private ArrayList<Record> readrecord(String filePath) {
+        ArrayList<Record> records = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            int itemCount = 0;
+
+            line = br.readLine();
+            if (line != null && line.startsWith("(item:")) {
+                itemCount = Integer.parseInt(line.replaceAll("[^0-9]", ""));
+            }
+
+            br.readLine();
+
+            for (int count = 0; count < itemCount; count++) {
+                line = br.readLine();
+                if (line != null) {
+                    line = line.trim();
+                    String[] parts = line.split(",\s*");
+
+                    if (parts.length == 4) {
+                        String name = parts[0];
+                        String time = parts[1];
+                        double amount = Double.parseDouble(parts[2]);
+                        boolean isIncome = Boolean.parseBoolean(parts[3]);
+                        records.add(new Record(name, time, amount, isIncome));
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error reading the file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Error parsing numbers in the file: " + e.getMessage());
+        }
+        return records;
+    }
+
+    private void CheckFolder() {
+        Path folder = Paths.get("Record");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yy");
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+        ArrayList<RecordDay> folderlist = new ArrayList<>();
+        try {
+            Files.walk(folder)
+                    .filter(Files::isRegularFile)
+                    .forEach(path -> {
+                        String filename = path.getFileName().toString();
+                        System.out.println("Processing file: " + filename);
+
+                        if (filename.endsWith(".txt")) {
+                            filename = filename.substring(0, filename.lastIndexOf("."));
+                        }
+                        try {
+                            String directory = "Record/" + filename + ".txt";
+
+                            LocalDate date = LocalDate.parse(filename, formatter);
+                            String day = date.getDayOfWeek().toString().substring(0, 1) + date.getDayOfWeek().toString().substring(1).toLowerCase();
+                            folderlist.add(new RecordDay(this, date.format(formatter2), day, readrecord(directory)));
+
+                        } catch (Exception ex) {
+                            System.err.println("Error processing file " + filename + ": " + ex.getMessage());
+                        }
+                    });
+        } catch (IOException e) {
+            System.err.println("Error browsing folder: " + e.getMessage());
+        }
+        Collections.sort(folderlist, Comparator.comparing(RecordDay
+                -> LocalDate.parse(RecordDay.date, formatter2), Comparator.reverseOrder()
+        ));
+        
+        for (RecordDay day : folderlist) {
+            DayList.add(day);
         }
     }
 
@@ -712,6 +815,7 @@ public class MainFrame extends javax.swing.JFrame {
         boolean type = currenttype;
 
         current.add(new Record(name, time, amount, type));
+        createDailyFile(current);
 
         NameField.setText("");
         TimeField.setText("");
