@@ -11,7 +11,6 @@ import javax.swing.event.*;
 import java.awt.event.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 /**
  *
@@ -234,7 +233,7 @@ public class MainFrame extends javax.swing.JFrame {
                The + quantifier ensures that at least one digit follows the decimal point (if it exists).
         $ = Anchors to the end of the string.
         */
-        String timestruct = "^([1-9]|1[0-2]):([0-5][0-9])\\s?[APap][Mm]$";
+        String timestruct = "^([1-9]|1[0-2]):([0-5][0-9])\s[APap][Mm]$";
         /*
         ^ = Anchors the regex to the start of the string.
         ([1-9]|1[0-2]) = Matches the hour part:
@@ -660,6 +659,10 @@ public class MainFrame extends javax.swing.JFrame {
         NameLabel.setText("Name of Income");
         Color income = new Color(131, 255, 158);
         ItemPanel.setBackground(income);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+        LocalTime currenttime = LocalTime.now();
+        TimeField.setText(currenttime.format(formatter));
+        TimeLabel.setVisible(false);
         ItemPanel.setVisible(true);
         HomeListContainer.setWheelScrollingEnabled(false);
         currenttype = true;
@@ -686,6 +689,10 @@ public class MainFrame extends javax.swing.JFrame {
         NameLabel.setText("Name of Expense");
         Color expense = new Color(255, 131, 131);
         ItemPanel.setBackground(expense);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+        LocalTime currenttime = LocalTime.now();
+        TimeField.setText(currenttime.format(formatter));
+        TimeLabel.setVisible(false);
         ItemPanel.setVisible(true);
         HomeListContainer.setWheelScrollingEnabled(false);
         currenttype = false;
