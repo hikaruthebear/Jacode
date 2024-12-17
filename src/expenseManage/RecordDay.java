@@ -34,7 +34,7 @@ public class RecordDay extends javax.swing.JPanel {
         Color negativepanel = new Color (225, 193, 193);
         
         for (Record record : records) {
-            if (record.isIncome) {
+            if (record.isIncome()) {
                 amount += record.amount;
             }
             else {

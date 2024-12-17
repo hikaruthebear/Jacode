@@ -15,13 +15,18 @@ public class Record extends javax.swing.JPanel {
     String name;
     String time;
     double amount;
-    boolean isIncome;
+    String type;
     
-    public Record (String name, String time, double amount, boolean isIncome) {
+    boolean isIncome(){
+        return type.toLowerCase().equals("income");
+    }
+    
+    public Record (String time, String type, double amount, String name) {
+        
         this.name = name;
         this.time = time;
         this.amount = amount;
-        this.isIncome = isIncome;
+        this.type = type;
         Icon income = new ImageIcon("src/resources/income.png");
         Icon expense = new ImageIcon("src/resources/expense.png");
         Color incometimecolor = new Color (89, 111, 75);
@@ -33,7 +38,7 @@ public class Record extends javax.swing.JPanel {
         
         initComponents();
         
-        if (isIncome == true) {
+        if (isIncome()) {
             ListItemPanel.setBackground(incomepanel);
             TypeIcon.setIcon(income);
             ItemTime.setForeground(incometimecolor);
@@ -53,6 +58,10 @@ public class Record extends javax.swing.JPanel {
         
     }
 
+    @Override 
+    public String toString(){
+        return time + ", " + type + ", " + amount + ", " + name;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -4,6 +4,7 @@
  */
 package expenseManage;
 
+import static expenseManage.FileHandler.*;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -18,8 +19,8 @@ import java.util.Locale;
  * @author User-PC
  */
 public class MainFrame extends javax.swing.JFrame {
-
-    ArrayList<Record> current = new ArrayList<>();
+    String filePath = "Record/" + getFormattedDate() + ".txt";
+    ArrayList<Record> current = (ArrayList<Record>) readFile(filePath);
     boolean currenttype;
 
     public MainFrame() {
@@ -27,6 +28,8 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
 
         SwitchtoHome();
+        /*
+        
         //pwede tanggalin to tinest ko lang
         //String name, String time, double amount, boolean isIncome (if income yes, if expense false)
         ArrayList<Record> record1 = new ArrayList<>();
@@ -45,8 +48,9 @@ public class MainFrame extends javax.swing.JFrame {
         RecordDay test1 = new RecordDay(this, "January 01, 2024", "Tuesday", record2);
         DayList.add(test);
         DayList.add(test1);
-
-        //<--->
+        */
+        writeFile(filePath, current);
+        
     }
 
     public void SwitchtoHome() {
@@ -79,7 +83,7 @@ public class MainFrame extends javax.swing.JFrame {
         double balance = 0;
         double spent = 0;
         for (Record record : records) {
-            if (record.isIncome) {
+            if (record.isIncome()) {
                 balance += record.amount;
             } else {
                 spent += record.amount;
@@ -140,6 +144,7 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         });
+
         NameField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -156,6 +161,7 @@ public class MainFrame extends javax.swing.JFrame {
                 ValidateInput();
             }
         });
+
         TimeField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -233,7 +239,7 @@ public class MainFrame extends javax.swing.JFrame {
         \\d+ = Matches one or more digits.
                The + quantifier ensures that at least one digit follows the decimal point (if it exists).
         $ = Anchors to the end of the string.
-        */
+         */
         String timestruct = "^([1-9]|1[0-2]):([0-5][0-9])\\s?[APap][Mm]$";
         /*
         ^ = Anchors the regex to the start of the string.
@@ -249,7 +255,7 @@ public class MainFrame extends javax.swing.JFrame {
         [APap] = Matches either 'A' or 'P', case-insensitive.
         [Mm] = Matches 'M', case-insensitive.
         $ = Anchors to the end of the string.
-        */
+         */
         if (amount.matches(amountstruct) && time.matches(timestruct) && !name.isEmpty() && !time.isEmpty()) {
             ConfirmButton.setEnabled(true);
         } else {
@@ -316,7 +322,7 @@ public class MainFrame extends javax.swing.JFrame {
         NameLabel.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
         NameLabel.setForeground(new java.awt.Color(153, 153, 153));
         NameLabel.setText("Name of Expense");
-        ItemPanel.add(NameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 410, 30));
+        ItemPanel.add(NameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 410, 30));
 
         AmountLabel.setFont(new java.awt.Font("Lucida Sans", 0, 18)); // NOI18N
         AmountLabel.setForeground(new java.awt.Color(153, 153, 153));
@@ -325,6 +331,7 @@ public class MainFrame extends javax.swing.JFrame {
         ItemPanel.add(AmountLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 130, 50));
 
         NameField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        NameField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         NameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NameFieldActionPerformed(evt);
@@ -669,6 +676,11 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void ExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExpenseButtonActionPerformed
         HomeListContainer.setWheelScrollingEnabled(false);
+        //i set ung current time sa timefield
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+        LocalTime currentTime = LocalTime.now();
+        TimeField.setText(currentTime.format(formatter));
+        
         if (HomeMainPanel.isShowing()) {
             if (ExpenseButton.isSelected()) {
                 PopUpPanel.setVisible(true);
@@ -701,9 +713,15 @@ public class MainFrame extends javax.swing.JFrame {
         String name = NameField.getText();
         String time = TimeField.getText().toUpperCase();
         double amount = Double.parseDouble(AmountField.getText());
-        boolean type = currenttype;
+        String type;
+        
+        if(currenttype){
+            type = "Income";
+        }else {
+            type = "Expense";
+        }
 
-        current.add(new Record(name, time, amount, type));
+        current.add(new Record(time, type, amount, type));
 
         NameField.setText("");
         TimeField.setText("");
