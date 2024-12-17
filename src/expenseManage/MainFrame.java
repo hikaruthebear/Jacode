@@ -60,6 +60,7 @@ public class MainFrame extends javax.swing.JFrame {
         ExpenseButton.setIcon(plus);
         ItemPanel.setVisible(false);
         HomeListContainer.setWheelScrollingEnabled(true);
+        SetTopPanelInfo(current);
     }
 
     public void SwitchtoList() {
