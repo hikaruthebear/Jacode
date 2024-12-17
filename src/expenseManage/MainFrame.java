@@ -40,7 +40,7 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             createDailyFile(current);
             currentdate = LocalDate.parse(currentDate, dateFormat);
-            currentday = currentdate.getDayOfWeek().toString().substring(0, 1) + currentdate.getDayOfWeek().toString().substring(1).toLowerCase();
+            currentday = currentdate.getDayOfWeek().toString().substring(0, 1) + currentdate.getDayOfWeek().toString().substring(1).toLowerCase();;
         }
 
         initComponents();
@@ -64,6 +64,8 @@ public class MainFrame extends javax.swing.JFrame {
         ItemPanel.setVisible(false);
         HomeListContainer.setWheelScrollingEnabled(true);
         SetTopPanelInfo(current, currentday, currentdate);
+        DayList.removeAll();
+        CheckFolder();
         ParseList(current);
     }
 
@@ -111,7 +113,7 @@ public class MainFrame extends javax.swing.JFrame {
         MonthLabel.setText(month);
         
         currentdate = date;
-        currentday = daynumber; //redundacy
+        currentday = day; //redundacy
     }
 
     public void ParseList(ArrayList<Record> records) {
@@ -272,7 +274,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
-    public static boolean createDailyFile(ArrayList<Record> records) {
+    public static void createDailyFile(ArrayList<Record> records) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
         String currentDate = LocalDateTime.now().format(dateFormat);
         String fileName = currentDate + ".txt";
@@ -292,10 +294,8 @@ public class MainFrame extends javax.swing.JFrame {
                 writer.write(String.format("%s, %s, %f, %b\n", record.name, record.time, record.amount, record.isIncome));
             }
             System.out.println("File saved: " + file.getName());
-            return true;
         } catch (IOException e) {
             System.err.println("An error occurred while saving the file: " + e.getMessage());
-            return false;
         }
     }
 
@@ -789,8 +789,6 @@ public class MainFrame extends javax.swing.JFrame {
         boolean type = currenttype;
 
         current.addFirst(new Record(name, time, amount, type));
-        
-        createDailyFile(current);
 
         NameField.setText("");
         TimeField.setText("");
@@ -798,6 +796,9 @@ public class MainFrame extends javax.swing.JFrame {
         ParseList(current);
         SetTopPanelInfo(current, currentday, currentdate);
         SwitchtoHome();
+        createDailyFile(current);
+        DayList.removeAll();
+        CheckFolder();
     }//GEN-LAST:event_ConfirmButtonActionPerformed
 
     /**
@@ -819,6 +820,7 @@ public class MainFrame extends javax.swing.JFrame {
                 new MainFrame().setVisible(true);
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
