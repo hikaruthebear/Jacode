@@ -58,7 +58,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public final void SwitchtoHome() {
-
+        SelectCheckBox.setSelected(false);
         NameRead();
         HomeMainPanel.setVisible(true);
         ListMainPanel.setVisible(false);
@@ -841,7 +841,12 @@ public class MainFrame extends javax.swing.JFrame {
                     }
                 }
                 SelectCheckBox.setSelected(false);
+                for (Record records : current) {
+                    records.check(false);
+                }
                 saveCurrentFile(current);
+                HomeListContainer.revalidate();
+                HomeListContainer.repaint();
                 SwitchtoHome();
             } else {
                 if (ExpenseButton.isSelected()) {
