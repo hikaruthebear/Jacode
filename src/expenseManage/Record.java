@@ -6,6 +6,7 @@ package expenseManage;
 
 import java.awt.Color;
 import javax.swing.*;
+
 /**
  *
  * @author hikaru
@@ -16,41 +17,55 @@ public class Record extends javax.swing.JPanel {
     String time;
     double amount;
     boolean isIncome;
-    
-    public Record (String name, String time, double amount, boolean isIncome) {
+
+    public Record(String name, String time, double amount, boolean isIncome) {
         this.name = name;
         this.time = time;
         this.amount = amount;
         this.isIncome = isIncome;
         Icon income = new ImageIcon("src/resources/income.png");
         Icon expense = new ImageIcon("src/resources/expense.png");
-        Color incometimecolor = new Color (89, 111, 75);
-        Color incomequantitycolor = new Color (0, 132, 29);
-        Color expensetimecolor = new Color (138, 98, 98);
-        Color expensequantitycolor = new Color (232, 0, 0);
-        Color incomepanel = new Color (160, 224, 160);
-        Color expensepanel = new Color (225, 193, 193);
-        
+        Color incometimecolor = new Color(89, 111, 75);
+        Color incomequantitycolor = new Color(0, 132, 29);
+        Color expensetimecolor = new Color(138, 98, 98);
+        Color expensequantitycolor = new Color(232, 0, 0);
+        Color incomepanel = new Color(160, 224, 160);
+        Color expensepanel = new Color(225, 193, 193);
+
         initComponents();
-        
+        CheckBox.setVisible(false);
+
         if (isIncome == true) {
             ListItemPanel.setBackground(incomepanel);
             TypeIcon.setIcon(income);
             ItemTime.setForeground(incometimecolor);
             ItemQuantity.setForeground(incomequantitycolor);
             ItemQuantity.setText(String.format("+%.2f P", amount));
-        }
-        else {
+        } else {
             ListItemPanel.setBackground(expensepanel);
             TypeIcon.setIcon(expense);
             ItemTime.setForeground(expensetimecolor);
             ItemQuantity.setForeground(expensequantitycolor);
             ItemQuantity.setText(String.format("-%.2f P", amount));
         }
-        
+
         ItemName.setText(name);
         ItemTime.setText(time);
-        
+
+    }
+
+    public void check(boolean state) {
+        if (CheckBox != null) {
+            CheckBox.setVisible(state);
+        }
+    }
+
+    public boolean checkstate() {
+        if (CheckBox != null) {
+            return CheckBox.isSelected();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -68,6 +83,7 @@ public class Record extends javax.swing.JPanel {
         ItemName = new javax.swing.JLabel();
         ItemTime = new javax.swing.JLabel();
         ItemQuantity = new javax.swing.JLabel();
+        CheckBox = new javax.swing.JCheckBox();
 
         setMaximumSize(new java.awt.Dimension(434, 113));
         setMinimumSize(new java.awt.Dimension(434, 113));
@@ -96,6 +112,7 @@ public class Record extends javax.swing.JPanel {
         ItemQuantity.setText("+100.00 P");
         ItemQuantity.setToolTipText("");
         ListItemPanel.add(ItemQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, -1, 50));
+        ListItemPanel.add(CheckBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, 20, 20));
 
         ListItemContainer.add(ListItemPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 410, 90));
 
@@ -104,6 +121,7 @@ public class Record extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox CheckBox;
     private javax.swing.JLabel ItemName;
     private javax.swing.JLabel ItemQuantity;
     private javax.swing.JLabel ItemTime;
