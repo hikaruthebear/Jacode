@@ -59,6 +59,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     public final void SwitchtoHome() {
         SelectCheckBox.setSelected(false);
+        for (Record records : current) {
+            records.check(false);
+        }
         NameRead();
         HomeMainPanel.setVisible(true);
         ListMainPanel.setVisible(false);
