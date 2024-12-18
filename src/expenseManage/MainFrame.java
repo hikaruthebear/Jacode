@@ -27,6 +27,8 @@ public class MainFrame extends javax.swing.JFrame {
     String currentday;
     LocalDate currentdate = null;
     String user;
+    Icon minus = new ImageIcon("src/resources/minus.png");
+    Icon plus = new ImageIcon("src/resources/add 1.png");
 
     public MainFrame() {
         user = "User";
@@ -46,6 +48,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         initComponents();
+        SelectCheckBox.doClick();
+        SelectCheckBox.doClick(); //WAKE UP!!
         HomeMainPanel.getRootPane().requestFocusInWindow();
         SwitchtoHome();
         //pwede tanggalin to tinest ko lang
@@ -54,8 +58,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public final void SwitchtoHome() {
-        Icon plus = new ImageIcon("src/resources/add 1.png");
-        
+
         NameRead();
         HomeMainPanel.setVisible(true);
         ListMainPanel.setVisible(false);
@@ -300,7 +303,7 @@ public class MainFrame extends javax.swing.JFrame {
             System.err.println("An error occurred while saving the file: " + e.getMessage());
         }
     }
-    
+
     public void saveCurrentFile(ArrayList<Record> records) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
         String savedate = currentdate.format(dateFormat);
@@ -479,6 +482,7 @@ public class MainFrame extends javax.swing.JFrame {
         ListSeperator = new javax.swing.JSeparator();
         HomeListContainer = new javax.swing.JScrollPane();
         HomeList = new javax.swing.JPanel();
+        SelectCheckBox = new javax.swing.JCheckBox();
         ListMainPanel = new javax.swing.JPanel();
         ListLabel1 = new javax.swing.JLabel();
         ListDayContainer = new javax.swing.JScrollPane();
@@ -735,16 +739,27 @@ public class MainFrame extends javax.swing.JFrame {
         HomeList.setLayout(new javax.swing.BoxLayout(HomeList, javax.swing.BoxLayout.Y_AXIS));
         HomeListContainer.setViewportView(HomeList);
 
+        SelectCheckBox.setFont(new java.awt.Font("Afacad", 0, 18)); // NOI18N
+        SelectCheckBox.setText("Select items");
+        SelectCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelectCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout BottomPanelLayout = new javax.swing.GroupLayout(BottomPanel);
         BottomPanel.setLayout(BottomPanelLayout);
         BottomPanelLayout.setHorizontalGroup(
             BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BottomPanelLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(ListSeperator, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(BottomPanelLayout.createSequentialGroup()
+                        .addComponent(ListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(SelectCheckBox)))
+                .addContainerGap(59, Short.MAX_VALUE))
             .addGroup(BottomPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(HomeListContainer)
@@ -754,8 +769,10 @@ public class MainFrame extends javax.swing.JFrame {
             BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BottomPanelLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(ListLabel)
-                .addGap(5, 5, 5)
+                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ListLabel)
+                    .addComponent(SelectCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ListSeperator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(HomeListContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -816,12 +833,24 @@ public class MainFrame extends javax.swing.JFrame {
     private void ExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExpenseButtonActionPerformed
         HomeListContainer.setWheelScrollingEnabled(false);
         if (HomeMainPanel.isShowing()) {
-            if (ExpenseButton.isSelected()) {
-                PopUpPanel.setVisible(true);
+            if (SelectCheckBox.isSelected()) {
+                for (int count = current.size() - 1; count >= 0; count--) {
+                    Record record = current.get(count);
+                    if (record.checkstate()) {
+                        current.remove(count);
+                    }
+                }
+                SelectCheckBox.setSelected(false);
+                saveCurrentFile(current);
+                SwitchtoHome();
             } else {
-                PopUpPanel.setVisible(false);
-                ItemPanel.setVisible(false);
-                HomeListContainer.setWheelScrollingEnabled(true);
+                if (ExpenseButton.isSelected()) {
+                    PopUpPanel.setVisible(true);
+                } else {
+                    PopUpPanel.setVisible(false);
+                    ItemPanel.setVisible(false);
+                    HomeListContainer.setWheelScrollingEnabled(true);
+                }
             }
         } else {
             SwitchtoHome();
@@ -855,13 +884,33 @@ public class MainFrame extends javax.swing.JFrame {
 
         current.addFirst(new Record(name, time, amount, type));
         saveCurrentFile(current);
-        
+
         NameField.setText("");
         TimeField.setText("");
         AmountField.setText("");
         SetTopPanelInfo(current, currentday, currentdate);
         SwitchtoHome();
     }//GEN-LAST:event_ConfirmButtonActionPerformed
+
+    private void SelectCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectCheckBoxActionPerformed
+
+        SelectCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (SelectCheckBox.isSelected()) {
+                    for (Record record : current) {
+                        record.check(true);
+                    }
+                    ExpenseButton.setIcon(minus);
+                } else {
+                    for (Record record : current) {
+                        record.check(false);
+                    }
+                    ExpenseButton.setIcon(plus);
+                }
+            }
+        });
+    }//GEN-LAST:event_SelectCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -922,6 +971,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField NameField;
     private javax.swing.JLabel NameLabel;
     private javax.swing.JPanel PopUpPanel;
+    private javax.swing.JCheckBox SelectCheckBox;
     private javax.swing.JTextField TimeField;
     private javax.swing.JLabel TimeLabel;
     private javax.swing.JPanel TopPanel;
