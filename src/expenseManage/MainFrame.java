@@ -21,11 +21,12 @@ import java.nio.file.*;
  * @author User-PC
  */
 class Register extends User {
+
     String userfolder = "Users/";
     String user;
     boolean success = false;
     Runnable successcallback;
-    
+
     public void successcallback(Runnable callback) {
         this.successcallback = callback;
     }
@@ -80,9 +81,9 @@ class Register extends User {
                 JOptionPane.showMessageDialog(this, "Password cannot be empty.");
                 return;
             }
-            
+
             if (createuser(username, password)) {
-                this.setVisible(false); 
+                this.setVisible(false);
                 if (successcallback != null) {
                     successcallback.run(); // successs
                 }
@@ -92,15 +93,16 @@ class Register extends User {
 }
 
 class Login extends User {
+
     String userfolder = "Users/";
     String user;
     boolean successful = false;
     Runnable successcallback;
-    
+
     public void successcallback(Runnable callback) {
         this.successcallback = callback;
     }
-    
+
     public boolean isSuccessful() {
         return successful;
     }
@@ -175,7 +177,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         Register register = new Register();
         Login login = new Login();
-        
+
         setUndecorated(true); // window remover
         this.setVisible(false);
 
@@ -184,10 +186,10 @@ public class MainFrame extends javax.swing.JFrame {
             login.setVisible(true);
         });
         login.InfoButton().addActionListener(e -> {
-            login.setVisible(false);        
+            login.setVisible(false);
             register.setVisible(true);
         });
-        
+
         register.successcallback(() -> {
             if (register.isSuccessful()) {
                 user = register.getUser();
@@ -195,7 +197,7 @@ public class MainFrame extends javax.swing.JFrame {
                 initialize();
             }
         });
-        
+
         login.successcallback(() -> {
             if (login.isSuccessful()) {
                 user = login.getUser();
@@ -203,20 +205,20 @@ public class MainFrame extends javax.swing.JFrame {
                 initialize();
             }
         });
-        
+
         login.setVisible(true);
         register.setVisible(false);
     }
-    
+
     private void initialize() {
-        
+
         if (user == null) {
             return; //get outta here!!!!!
         }
-        
+
         dispose();  // 
         setUndecorated(false);
-        initComponents()    ;
+        initComponents();
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
         String currentDate = LocalDateTime.now().format(dateFormat); // e.g., 06-12-24
         String path = "Users/" + user + "/Records/" + currentDate + ".txt";
@@ -231,7 +233,7 @@ public class MainFrame extends javax.swing.JFrame {
             currentdate = LocalDate.parse(currentDate, dateFormat);
             currentday = currentdate.getDayOfWeek().toString().substring(0, 1) + currentdate.getDayOfWeek().toString().substring(1).toLowerCase();;
         }
-        
+
         SelectCheckBox.doClick();
         SelectCheckBox.doClick(); //WAKE UP!!
         HomeMainPanel.getRootPane().requestFocusInWindow();
@@ -495,7 +497,7 @@ public class MainFrame extends javax.swing.JFrame {
         String savedate = currentdate.format(dateFormat);
         String fileName = savedate + ".txt";
         String relativeDirectory = "Users/" + user + "/Record";
-        
+
         File dir = new File(relativeDirectory);
         if (!dir.exists()) {
             dir.mkdir();
@@ -560,10 +562,10 @@ public class MainFrame extends javax.swing.JFrame {
         ArrayList<RecordDay> folderlist = new ArrayList<>();
         try {
             if (!Files.exists(folder)) {
-            Files.createDirectories(folder); //just created so nuh uh
-            return;
-        }
-            
+                Files.createDirectories(folder); //just created so nuh uh
+                return;
+            }
+
             Files.walk(folder)
                     .filter(Files::isRegularFile)
                     .forEach(path -> {
@@ -598,6 +600,28 @@ public class MainFrame extends javax.swing.JFrame {
         for (RecordDay day : folderlist) {
             DayList.add(day);
         }
+    }
+
+    private void handleLogout() {
+        int choice = JOptionPane.showConfirmDialog(
+        this,
+        "Are you sure you want to log out?",
+        null,
+        JOptionPane.YES_NO_OPTION
+    );
+    
+    if (choice == JOptionPane.YES_OPTION) {
+        Login login = new Login();
+        
+        login.successcallback(() -> {
+            user = login.getUser();
+            login.dispose();
+            initialize();
+        });
+        
+        login.setVisible(true);
+        this.setVisible(false);
+    }
     }
 
     /**
@@ -640,6 +664,7 @@ public class MainFrame extends javax.swing.JFrame {
         DayLabel = new javax.swing.JLabel();
         CalendarLabel = new javax.swing.JLabel();
         BalanceBarSpent = new javax.swing.JLabel();
+        LogoutButton = new javax.swing.JButton();
         BottomPanel = new javax.swing.JPanel();
         ListLabel = new javax.swing.JLabel();
         ListSeperator = new javax.swing.JSeparator();
@@ -804,12 +829,12 @@ public class MainFrame extends javax.swing.JFrame {
         UserLabel.setFont(new java.awt.Font("Albert Sans", 1, 24)); // NOI18N
         UserLabel.setForeground(new java.awt.Color(51, 51, 51));
         UserLabel.setText("Hi, User");
-        TopPanel.add(UserLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 34, 240, -1));
+        TopPanel.add(UserLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 240, -1));
 
         BalanceLabel.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
         BalanceLabel.setForeground(new java.awt.Color(51, 51, 51));
         BalanceLabel.setText("Balance");
-        TopPanel.add(BalanceLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+        TopPanel.add(BalanceLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
         BalanceQuantity.setBackground(new java.awt.Color(0, 0, 0));
         BalanceQuantity.setFont(new java.awt.Font("Albert Sans", 1, 48)); // NOI18N
@@ -879,6 +904,18 @@ public class MainFrame extends javax.swing.JFrame {
         BalanceBarSpent.setForeground(new java.awt.Color(28, 103, 30));
         BalanceBarSpent.setText("P749.99");
         TopPanel.add(BalanceBarSpent, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, -1, -1));
+
+        LogoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Group 4.png"))); // NOI18N
+        LogoutButton.setBorderPainted(false);
+        LogoutButton.setContentAreaFilled(false);
+        LogoutButton.setFocusPainted(false);
+        LogoutButton.setFocusable(false);
+        LogoutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutButtonActionPerformed(evt);
+            }
+        });
+        TopPanel.add(LogoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 40));
 
         HomeMainPanel.add(TopPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 260));
 
@@ -1074,6 +1111,10 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_SelectCheckBoxActionPerformed
 
+    private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
+        handleLogout();
+    }//GEN-LAST:event_LogoutButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1128,6 +1169,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel ListLabel1;
     private javax.swing.JPanel ListMainPanel;
     private javax.swing.JSeparator ListSeperator;
+    private javax.swing.JButton LogoutButton;
     private javax.swing.JLabel MonthLabel;
     private javax.swing.JTextField NameField;
     private javax.swing.JLabel NameLabel;
