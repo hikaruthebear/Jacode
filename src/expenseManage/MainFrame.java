@@ -20,6 +20,147 @@ import java.nio.file.*;
  *
  * @author User-PC
  */
+class Register extends User {
+    String userfolder = "Users/";
+    String user;
+    boolean success = false;
+    Runnable successcallback;
+    
+    public void successcallback(Runnable callback) {
+        this.successcallback = callback;
+    }
+
+    public boolean isSuccessful() {
+        return success;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    private boolean createuser(String username, String password) {
+        File userFolder = new File(userfolder, username);
+        if (userFolder.exists()) {
+            JOptionPane.showMessageDialog(this, "User already exists. Please choose a different username.");
+            return false;
+        }
+
+        if (userFolder.mkdirs()) {
+            File passwordFile = new File(userFolder, "password.txt");
+            try (FileWriter writer = new FileWriter(passwordFile)) {
+                writer.write(password);
+                this.user = username;
+                this.success = true;
+                return true;
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error saving user data: " + e.getMessage());
+                return false;
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Error creating user folder.");
+            return false;
+        }
+    }
+
+    public Register() {
+        super.Button().setText("Register");
+        super.InfoLabel().setText("Already have an account?");
+        super.InfoButtonLabel().setText("Login");
+
+        super.Button().addActionListener(e -> {
+            String username = UserField().getText();
+            String password = PassField().getText();
+
+            if (username == null || username.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Username cannot be empty.");
+                return;
+            }
+
+            if (password == null || password.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Password cannot be empty.");
+                return;
+            }
+            
+            if (createuser(username, password)) {
+                this.setVisible(false); 
+                if (successcallback != null) {
+                    successcallback.run(); // successs
+                }
+            }
+        });
+    }
+}
+
+class Login extends User {
+    String userfolder = "Users/";
+    String user;
+    boolean successful = false;
+    Runnable successcallback;
+    
+    public void successcallback(Runnable callback) {
+        this.successcallback = callback;
+    }
+    
+    public boolean isSuccessful() {
+        return successful;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    private boolean authuser(String username, String password) {
+        File userFolder = new File(userfolder, username);
+        if (!userFolder.exists()) {
+            JOptionPane.showMessageDialog(this, "User does not exist.");
+            return false;
+        }
+
+        File passwordFile = new File(userFolder, "password.txt");
+        try (BufferedReader reader = new BufferedReader(new FileReader(passwordFile))) {
+            String storedPassword = reader.readLine();
+            if (storedPassword.equals(password)) {
+                this.user = username;
+                this.successful = true;
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(this, "Incorrect password.");
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error reading user data: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public Login() {
+        super.Button().setText("Login");
+        super.InfoLabel().setText("Don't have an account?");
+        super.InfoButtonLabel().setText("Register");
+
+        super.Button().addActionListener(e -> {
+            String username = UserField().getText();
+            String password = PassField().getText();
+
+            if (username == null || username.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Username cannot be empty.");
+                return;
+            }
+
+            if (password == null || password.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Password cannot be empty.");
+                return;
+            }
+
+            if (authuser(username, password)) {
+                this.setVisible(false);
+                if (successcallback != null) {
+                    successcallback.run(); // successs
+                }
+            }
+        });
+    }
+}
+
 public class MainFrame extends javax.swing.JFrame {
 
     ArrayList<Record> current = new ArrayList<>();
@@ -31,10 +172,54 @@ public class MainFrame extends javax.swing.JFrame {
     Icon plus = new ImageIcon("src/resources/add 1.png");
 
     public MainFrame() {
-        user = "User";
+
+        Register register = new Register();
+        Login login = new Login();
+        
+        setUndecorated(true); // window remover
+        this.setVisible(false);
+
+        register.InfoButton().addActionListener(e -> {
+            register.setVisible(false);
+            login.setVisible(true);
+        });
+        login.InfoButton().addActionListener(e -> {
+            login.setVisible(false);        
+            register.setVisible(true);
+        });
+        
+        register.successcallback(() -> {
+            if (register.isSuccessful()) {
+                user = register.getUser();
+                register.dispose();
+                initialize();
+            }
+        });
+        
+        login.successcallback(() -> {
+            if (login.isSuccessful()) {
+                user = login.getUser();
+                login.dispose();
+                initialize();
+            }
+        });
+        
+        login.setVisible(true);
+        register.setVisible(false);
+    }
+    
+    private void initialize() {
+        
+        if (user == null) {
+            return; //get outta here!!!!!
+        }
+        
+        dispose();  // 
+        setUndecorated(false);
+        initComponents()    ;
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
         String currentDate = LocalDateTime.now().format(dateFormat); // e.g., 06-12-24
-        String path = "Record/" + currentDate + ".txt";
+        String path = "Users/" + user + "/Records/" + currentDate + ".txt";
         File file = new File(path);
 
         if (file.exists()) {
@@ -42,12 +227,11 @@ public class MainFrame extends javax.swing.JFrame {
             currentdate = LocalDate.parse(currentDate, dateFormat);
             currentday = currentdate.getDayOfWeek().toString().substring(0, 1) + currentdate.getDayOfWeek().toString().substring(1).toLowerCase();
         } else {
-            createDailyFile(current);
+            createDailyFile(current, user);
             currentdate = LocalDate.parse(currentDate, dateFormat);
             currentday = currentdate.getDayOfWeek().toString().substring(0, 1) + currentdate.getDayOfWeek().toString().substring(1).toLowerCase();;
         }
-
-        initComponents();
+        
         SelectCheckBox.doClick();
         SelectCheckBox.doClick(); //WAKE UP!!
         HomeMainPanel.getRootPane().requestFocusInWindow();
@@ -55,6 +239,7 @@ public class MainFrame extends javax.swing.JFrame {
         //pwede tanggalin to tinest ko lang
         //String name, String time, double amount, boolean isIncome (if income yes, if expense false)
         //<--->
+        this.setVisible(true);
     }
 
     public final void SwitchtoHome() {
@@ -62,7 +247,6 @@ public class MainFrame extends javax.swing.JFrame {
         for (Record records : current) {
             records.check(false);
         }
-        NameRead();
         HomeMainPanel.setVisible(true);
         ListMainPanel.setVisible(false);
         HomeButton.setSelected(true);
@@ -88,7 +272,6 @@ public class MainFrame extends javax.swing.JFrame {
         PopUpPanel.setVisible(false);
         ExpenseButton.setIcon(backarrow);
         ItemPanel.setVisible(false);
-        NameSave();
     }
 
     public void SetTopPanelInfo(ArrayList<Record> records, String day, LocalDate date) {
@@ -119,7 +302,7 @@ public class MainFrame extends javax.swing.JFrame {
         String daynumber = String.valueOf(date.getDayOfMonth());
         DayNumberLabel.setText(daynumber);
         MonthLabel.setText(month);
-
+        UserLabel.setText("Hi, " + user);
         currentdate = date;
         currentday = day; //redundacy
     }
@@ -282,11 +465,11 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
-    public static void createDailyFile(ArrayList<Record> records) {
+    public static void createDailyFile(ArrayList<Record> records, String user) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
         String currentDate = LocalDateTime.now().format(dateFormat);
         String fileName = currentDate + ".txt";
-        String relativeDirectory = "Record";
+        String relativeDirectory = "Users/" + user + "/Records";
 
         File dir = new File(relativeDirectory);
         if (!dir.exists()) {
@@ -311,8 +494,8 @@ public class MainFrame extends javax.swing.JFrame {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
         String savedate = currentdate.format(dateFormat);
         String fileName = savedate + ".txt";
-        String relativeDirectory = "Record";
-
+        String relativeDirectory = "Users/" + user + "/Record";
+        
         File dir = new File(relativeDirectory);
         if (!dir.exists()) {
             dir.mkdir();
@@ -371,11 +554,16 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void CheckFolder() {
-        Path folder = Paths.get("Record");
+        Path folder = Paths.get("Users/" + user + "/Records");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yy");
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
         ArrayList<RecordDay> folderlist = new ArrayList<>();
         try {
+            if (!Files.exists(folder)) {
+            Files.createDirectories(folder); //just created so nuh uh
+            return;
+        }
+            
             Files.walk(folder)
                     .filter(Files::isRegularFile)
                     .forEach(path -> {
@@ -386,7 +574,7 @@ public class MainFrame extends javax.swing.JFrame {
                             filename = filename.substring(0, filename.lastIndexOf("."));
                         }
                         try {
-                            String directory = "Record/" + filename + ".txt";
+                            String directory = "Users/" + user + "/Records/" + filename + ".txt";
 
                             if (filename.matches("\\d{2}-\\d{2}-\\d{2}")) {
                                 LocalDate date = LocalDate.parse(filename, formatter);
@@ -409,33 +597,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         for (RecordDay day : folderlist) {
             DayList.add(day);
-        }
-    }
-
-    private void NameSave() {
-        String fileuser = UserField.getText(); //
-        Path filePath = Paths.get("Record/user.txt");
-
-        try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
-            writer.write(fileuser);
-            System.out.println("Text written to file: " + filePath);
-        } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
-        }
-    }
-
-    private void NameRead() {
-        Path filePath = Paths.get("Record/user.txt");
-
-        if (!Files.exists(filePath)) {
-            System.err.println("File does not exist: " + filePath);
-        }
-
-        try (BufferedReader reader = Files.newBufferedReader(filePath)) {
-            String content = reader.readLine();
-            user = content;
-        } catch (IOException e) {
-            System.err.println("Error reading from file: " + e.getMessage());
         }
     }
 
@@ -467,8 +628,7 @@ public class MainFrame extends javax.swing.JFrame {
         ListButton = new javax.swing.JToggleButton();
         HomeMainPanel = new javax.swing.JPanel();
         TopPanel = new javax.swing.JPanel();
-        UserField = new javax.swing.JTextField();
-        HiLabel = new javax.swing.JLabel();
+        UserLabel = new javax.swing.JLabel();
         BalanceLabel = new javax.swing.JLabel();
         BalanceQuantity = new javax.swing.JLabel();
         BalancePanel = new javax.swing.JPanel();
@@ -641,16 +801,10 @@ public class MainFrame extends javax.swing.JFrame {
         TopPanel.setBackground(new java.awt.Color(226, 255, 223));
         TopPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        UserField.setBackground(new java.awt.Color(226, 255, 223));
-        UserField.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        UserField.setText("User");
-        UserField.setBorder(null);
-        TopPanel.add(UserField, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 34, 190, 32));
-
-        HiLabel.setFont(new java.awt.Font("Albert Sans", 1, 24)); // NOI18N
-        HiLabel.setForeground(new java.awt.Color(51, 51, 51));
-        HiLabel.setText("Hi,");
-        TopPanel.add(HiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 34, -1, -1));
+        UserLabel.setFont(new java.awt.Font("Albert Sans", 1, 24)); // NOI18N
+        UserLabel.setForeground(new java.awt.Color(51, 51, 51));
+        UserLabel.setText("Hi, User");
+        TopPanel.add(UserLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 34, 240, -1));
 
         BalanceLabel.setFont(new java.awt.Font("Afacad Medium", 0, 18)); // NOI18N
         BalanceLabel.setForeground(new java.awt.Color(51, 51, 51));
@@ -936,7 +1090,7 @@ public class MainFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                MainFrame frame = new MainFrame();
             }
         });
     }
@@ -963,7 +1117,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel DayNumberLabel;
     private javax.swing.JToggleButton ExpenseButton;
     private javax.swing.JLabel ExpenseButtonLabel;
-    private javax.swing.JLabel HiLabel;
     private javax.swing.JToggleButton HomeButton;
     private javax.swing.JPanel HomeList;
     private javax.swing.JScrollPane HomeListContainer;
@@ -983,6 +1136,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField TimeField;
     private javax.swing.JLabel TimeLabel;
     private javax.swing.JPanel TopPanel;
-    private javax.swing.JTextField UserField;
+    private javax.swing.JLabel UserLabel;
     // End of variables declaration//GEN-END:variables
 }
