@@ -8,11 +8,25 @@ package expenseManage;
  *
  * @author hikaru
  */
-public class User extends javax.swing.JFrame {
+abstract class User extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Loginpage
-     */
+    String userfolder = "Users/";
+    String user;
+    boolean success = false;
+    Runnable successcallback;
+
+    public void successcallback(Runnable callback) {
+        this.successcallback = callback;
+    }
+
+    public boolean isSuccessful() {
+        return success;
+    }
+
+    public String getUser() {
+        return user;
+    }
+    
     public User() {
         initComponents();
     }
@@ -40,7 +54,8 @@ public class User extends javax.swing.JFrame {
     public javax.swing.JTextField PassField() {
         return PassField;
     }
-
+    
+    abstract boolean parseuser (String username, String password);
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -180,11 +195,6 @@ public class User extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new User().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

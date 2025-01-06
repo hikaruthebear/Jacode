@@ -22,24 +22,8 @@ import java.nio.file.*;
  */
 class Register extends User {
 
-    String userfolder = "Users/";
-    String user;
-    boolean success = false;
-    Runnable successcallback;
-
-    public void successcallback(Runnable callback) {
-        this.successcallback = callback;
-    }
-
-    public boolean isSuccessful() {
-        return success;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    private boolean createuser(String username, String password) {
+    @Override
+    boolean parseuser(String username, String password) {
         File userFolder = new File(userfolder, username);
         if (userFolder.exists()) {
             JOptionPane.showMessageDialog(this, "User already exists. Please choose a different username.");
@@ -82,7 +66,7 @@ class Register extends User {
                 return;
             }
 
-            if (createuser(username, password)) {
+            if (parseuser(username, password)) {
                 this.setVisible(false);
                 if (successcallback != null) {
                     successcallback.run(); // successs
@@ -94,24 +78,8 @@ class Register extends User {
 
 class Login extends User {
 
-    String userfolder = "Users/";
-    String user;
-    boolean successful = false;
-    Runnable successcallback;
-
-    public void successcallback(Runnable callback) {
-        this.successcallback = callback;
-    }
-
-    public boolean isSuccessful() {
-        return successful;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    private boolean authuser(String username, String password) {
+    @Override
+    boolean parseuser(String username, String password) {
         File userFolder = new File(userfolder, username);
         if (!userFolder.exists()) {
             JOptionPane.showMessageDialog(this, "User does not exist.");
@@ -123,7 +91,7 @@ class Login extends User {
             String storedPassword = reader.readLine();
             if (storedPassword.equals(password)) {
                 this.user = username;
-                this.successful = true;
+                this.success = true;
                 return true;
             } else {
                 JOptionPane.showMessageDialog(this, "Incorrect password.");
@@ -153,7 +121,7 @@ class Login extends User {
                 return;
             }
 
-            if (authuser(username, password)) {
+            if (parseuser(username, password)) {
                 this.setVisible(false);
                 if (successcallback != null) {
                     successcallback.run(); // successs
@@ -172,6 +140,7 @@ public class MainFrame extends javax.swing.JFrame {
     String user;
     Icon minus = new ImageIcon("src/resources/minus.png");
     Icon plus = new ImageIcon("src/resources/add 1.png");
+    boolean initialized;
 
     public MainFrame() {
 
@@ -211,14 +180,19 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void initialize() {
+        if (initialized) {
+            return;
+        }
+        initialized = true;
 
         if (user == null) {
             return; //get outta here!!!!!
         }
 
-        dispose();  // 
+        dispose();
         setUndecorated(false);
         initComponents();
+
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
         String currentDate = LocalDateTime.now().format(dateFormat); // e.g., 06-12-24
         String path = "Users/" + user + "/Records/" + currentDate + ".txt";
@@ -496,7 +470,7 @@ public class MainFrame extends javax.swing.JFrame {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yy");
         String savedate = currentdate.format(dateFormat);
         String fileName = savedate + ".txt";
-        String relativeDirectory = "Users/" + user + "/Record";
+        String relativeDirectory = "Users/" + user + "/Records";
 
         File dir = new File(relativeDirectory);
         if (!dir.exists()) {
@@ -604,24 +578,17 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void handleLogout() {
         int choice = JOptionPane.showConfirmDialog(
-        this,
-        "Are you sure you want to log out?",
-        null,
-        JOptionPane.YES_NO_OPTION
-    );
-    
-    if (choice == JOptionPane.YES_OPTION) {
-        Login login = new Login();
-        
-        login.successcallback(() -> {
-            user = login.getUser();
-            login.dispose();
-            initialize();
-        });
-        
-        login.setVisible(true);
-        this.setVisible(false);
-    }
+                this,
+                "Are you sure you want to log out?",
+                null,
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (choice == JOptionPane.YES_OPTION) {
+            this.dispose();
+            MainFrame newMainFrame = new MainFrame();
+            newMainFrame.setVisible(true);
+        }
     }
 
     /**
